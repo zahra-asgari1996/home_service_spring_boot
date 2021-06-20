@@ -5,7 +5,8 @@ import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.ExpertDto;
 import ir.maktab.dto.ManagerDto;
 import ir.maktab.service.exception.*;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
@@ -21,7 +22,7 @@ import java.util.Objects;
 
 @ControllerAdvice
 public class ExceptionControllerAdvise {
-    private final static Logger logger=Logger.getLogger(ExceptionControllerAdvise.class);
+    private final static Logger logger= LogManager.getLogger(ExceptionControllerAdvise.class);
     private final MessageSource messageSource;
 
     public ExceptionControllerAdvise(MessageSource messageSource) {

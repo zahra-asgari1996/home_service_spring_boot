@@ -11,6 +11,7 @@
     <groupId>ir.maktab</groupId>
     <artifactId>home_service_spring_boot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>home_service_spring_boot</name>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -49,13 +50,23 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
-            <version>1.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.passay</groupId>
+            <artifactId>passay</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+
+
+
+
 
     </dependencies>
 
