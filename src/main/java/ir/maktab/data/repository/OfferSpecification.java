@@ -7,7 +7,9 @@ import ir.maktab.data.domain.Orders;
 import ir.maktab.dto.OfferHistoryDto;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 

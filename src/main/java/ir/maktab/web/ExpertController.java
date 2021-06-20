@@ -1,6 +1,5 @@
 package ir.maktab.web;
 
-import ir.maktab.configuration.LastViewInterceptor;
 import ir.maktab.dto.ExpertDto;
 import ir.maktab.dto.SubServiceDto;
 import ir.maktab.service.ExpertService;
@@ -12,17 +11,12 @@ import ir.maktab.service.validation.RegisterValidation;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
 
 @Controller
 @RequestMapping(value = "/expert")
@@ -146,33 +140,4 @@ public class ExpertController {
         }
         return "showOrdersForExpertToEndOfWork";
     }
-
-
-//    @ExceptionHandler({NotFoundExpertException.class, InvalidPassword.class, DuplicatedEmailAddressException.class,
-//            NotFoundSubServiceException.class,NotFoundOrderException.class
-//    })
-//    public ModelAndView errorHandler(Exception e, HttpServletRequest request) {
-//        Map<String, Object> model = new HashMap<>();
-//        model.put("error", e.getLocalizedMessage());
-//        model.put("loginExpert", new ExpertDto());
-//        model.put("expert", new ExpertDto());
-//        String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
-//        System.out.println(lastView);
-//        return new ModelAndView(lastView, model);
-//    }
-
-    @ExceptionHandler(value = BindException.class)
-    public ModelAndView validationHandler(BindException ex,HttpServletRequest request) {
-        Map<String, Object> model = new HashMap<>();
-        String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
-        ex.getFieldErrors().forEach(
-                error -> model.put(error.getField(),
-                        messageSource.getMessage(Objects.requireNonNull(error.getDefaultMessage()),
-                                null, new Locale("fa_ir")))
-        );
-        System.out.println("");
-        return new ModelAndView(lastView,model);
-    }
-
-
 }

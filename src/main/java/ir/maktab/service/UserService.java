@@ -2,6 +2,7 @@ package ir.maktab.service;
 
 import ir.maktab.dto.FilterUsersDto;
 import ir.maktab.dto.UserDto;
+import ir.maktab.dto.UserHistoryDto;
 
 import java.util.List;
 
@@ -13,4 +14,5 @@ public interface UserService {
     //    void changePassword(UserDto dto);
 //    List<UserDto> findByProperty(SearchCustomerDto dto);
     List<UserDto> filterUsers(FilterUsersDto dto);
+    List<UserDto> userHistory(UserHistoryDto dto);
 }

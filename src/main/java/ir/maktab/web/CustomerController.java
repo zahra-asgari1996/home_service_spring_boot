@@ -1,6 +1,5 @@
 package ir.maktab.web;
 
-import ir.maktab.configuration.LastViewInterceptor;
 import ir.maktab.dto.CreditCardInfo;
 import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.OrderDto;
@@ -14,7 +13,6 @@ import ir.maktab.service.validation.RegisterValidation;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,10 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
 
 @Controller
 @RequestMapping(value = "/customer")
@@ -172,16 +166,4 @@ public class CustomerController {
         }
         return "customerHomePage";
     }
-
-    @ExceptionHandler(value = BindException.class)
-    public ModelAndView bindHandler(BindException ex, HttpServletRequest request) {
-        String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
-        Map<String, Object> model = new HashMap<>();
-        ex.getFieldErrors().forEach(
-                error -> model.put(error.getField(),
-                        messageSource.getMessage(Objects.requireNonNull(error.getDefaultMessage()), null, new Locale("fa_ir")))
-        );
-        return new ModelAndView(lastView);
-    }
-
 }

@@ -20,8 +20,40 @@ import java.util.Locale;
 public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**").addResourceLocations("/static/");
+    }
+
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
+
+    @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(localeChangeInterceptor());
         registry.addInterceptor(new LastViewInterceptor());
+    }
+
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        return new LocaleChangeInterceptor();
+    }
+
+    @Bean
+    public FixedLocaleResolver fixedLocaleResolver() {
+        Locale.setDefault(Locale.forLanguageTag("fa_ir"));
+        FixedLocaleResolver fixedLocaleResolver = new FixedLocaleResolver();
+        fixedLocaleResolver.setDefaultLocale(Locale.forLanguageTag("fa_ir"));
+        return fixedLocaleResolver;
+    }
+
+    @Bean
+    public InternalResourceViewResolver viewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setPrefix("/WEB-INF/views/");
+        resolver.setSuffix(".jsp");
+        return resolver;
     }
 
     @Bean
@@ -40,4 +72,9 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(converter(objectMapper()));
     }
+
+//    @Override
+//    public void addViewControllers(ViewControllerRegistry registry) {
+//        registry.addViewController("/").setViewName("home");
+//    }
 }

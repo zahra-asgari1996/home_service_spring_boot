@@ -3,7 +3,6 @@ package ir.maktab.data.domain;
 import ir.maktab.data.enums.OfferSituation;
 import org.hibernate.annotations.CreationTimestamp;
 
-
 import javax.persistence.*;
 import java.util.Date;
 

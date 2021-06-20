@@ -11,7 +11,6 @@ import ir.maktab.service.exception.NotFoundOrderException;
 import ir.maktab.service.exception.NotSubServiceInExpertsListException;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,9 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("offer")
@@ -89,16 +86,4 @@ public class OfferController {
         System.out.println(lastView);
         return new ModelAndView(lastView, model);
     }
-
-    @ExceptionHandler(value = BindException.class)
-    public ModelAndView bindHandler(BindException ex, HttpServletRequest request) {
-        String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
-        Map<String, Object> model = new HashMap<>();
-        ex.getFieldErrors().forEach(
-                error -> model.put(error.getField(),
-                        messageSource.getMessage(Objects.requireNonNull(error.getDefaultMessage()), null, new Locale("fa_ir")))
-        );
-        return new ModelAndView(lastView, model);
-    }
-
 }

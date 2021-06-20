@@ -7,6 +7,10 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
+@ComponentScan("ir.maktab")
+@PropertySource("classpath:database.properties")
+@Import(DataBaseContext.class)
+@EnableWebMvc
 public class AppConfiguration {
 
     @Bean("messageSource")

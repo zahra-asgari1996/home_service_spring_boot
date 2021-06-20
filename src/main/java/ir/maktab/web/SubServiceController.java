@@ -12,14 +12,14 @@ import ir.maktab.service.exception.NotFoundServiceException;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("subService")
@@ -48,7 +48,6 @@ public class SubServiceController {
     @PostMapping("/addNewSubService")
     public String addNewSubService(@ModelAttribute("newSubService") @Valid SubServiceDto dto) throws DuplicatedDataException,
             NotFoundServiceException {
-        System.out.println(dto.getService().getName());
         subServiceService.saveNewSubService(dto);
         return "managerHomePage";
 
@@ -59,7 +58,6 @@ public class SubServiceController {
                                  @SessionAttribute("serviceList") List<ServiceDto> serviceList
             , @SessionAttribute("newOrder") OrderDto dto,
                                  HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
         List<String> subServices = subServiceService.getSubServicesByServiceName(service);
         model.addAttribute("newOrder", dto);
         model.addAttribute("subServiceList", subServices);
@@ -78,14 +76,4 @@ public class SubServiceController {
     }
 
 
-    @ExceptionHandler(value = BindException.class)
-    public ModelAndView bindHandler(BindException ex, HttpServletRequest request) {
-        String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
-        Map<String, Object> model = new HashMap<>();
-        ex.getFieldErrors().forEach(
-                error -> model.put(error.getField(),
-                        messageSource.getMessage(Objects.requireNonNull(error.getDefaultMessage()), null, new Locale("fa_ir")))
-        );
-        return new ModelAndView(lastView, model);
-    }
 }
