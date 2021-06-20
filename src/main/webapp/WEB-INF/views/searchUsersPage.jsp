@@ -81,6 +81,7 @@
             <td>Email</td>
             <td>UserRole</td>
             <td>Registry Data</td>
+            <td>Confirm Users</td>
         </tr>
         <c:forEach items="${usersList}" var="list">
             <tr>
@@ -89,10 +90,21 @@
                 <td>${list.email}</td>
                 <td>${list.role}</td>
                 <td>${list.date}</td>
+                <td>
+                    <c:if test="${list.role eq 'Expert' && list.situation eq 'Pending_approval'}">
+                        <a onclick="confirmUser(${list.id});" href="#" id="link">Confirm User</a>
+                    </c:if>
+                </td>
             </tr>
         </c:forEach>
     </table>
 </div>
+<script>
+    function confirmUser(id) {
+        console.log("hello" + id)
+        window.location.href = "http://localhost:8080/user/confirmUser/" + id;
+    }
+</script>
 </body>
 </html>
 

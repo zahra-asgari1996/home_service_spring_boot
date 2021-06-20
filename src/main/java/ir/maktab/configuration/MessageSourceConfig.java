@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
-public class AppConfiguration {
+public class MessageSourceConfig {
 
     @Bean("messageSource")
     public MessageSource getMessageSource() {

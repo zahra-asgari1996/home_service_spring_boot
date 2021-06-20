@@ -182,7 +182,13 @@
     </div>
 
     <div class="b-example-divider"></div>
+    <div>
+        <c:if test="${accessException ne null}">
+            <p class="d">${accessException}</p>
+        </c:if>
+    </div>
 </main>
+
 <script src="/static/bootstrap.bundle.min.js"></script>
 
 <script src="/static/sidebars.js"></script>

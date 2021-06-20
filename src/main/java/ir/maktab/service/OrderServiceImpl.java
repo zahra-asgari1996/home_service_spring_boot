@@ -6,8 +6,10 @@ import ir.maktab.data.domain.Orders;
 import ir.maktab.data.domain.SubService;
 import ir.maktab.data.enums.OfferSituation;
 import ir.maktab.data.enums.OrderSituation;
+import ir.maktab.data.enums.UserSituation;
 import ir.maktab.data.repository.*;
 import ir.maktab.dto.*;
+import ir.maktab.service.exception.AccessException;
 import ir.maktab.service.exception.NotFoundOfferForOrder;
 import ir.maktab.service.exception.NotFoundOrderException;
 import ir.maktab.service.mapper.CustomerMapper;
@@ -106,8 +108,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> findOrdersBaseOnExpertSubServicesAndSituation(ExpertDto expertDto) {
+    public List<OrderDto> findOrdersBaseOnExpertSubServicesAndSituation(ExpertDto expertDto) throws AccessException {
         Optional<Expert> expert = expertRepository.findByEmail(expertDto.getEmail());
+        if (!expert.get().getSituation().equals(UserSituation.Accepted)){
+            throw new AccessException(messageSource.getMessage("access.exception",null,new Locale("fa_ir")));
+        }
         List<Orders> orders = repository.findOrdersBaseOnExpertSubServices(expert.get());
         return orders.stream().filter(i -> i.getSituation().equals(OrderSituation.Waiting_for_expert_suggestions))
                 .map(i -> mapper.toOrderDto(i)).collect(Collectors.toList());

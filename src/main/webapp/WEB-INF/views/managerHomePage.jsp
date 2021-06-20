@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -79,6 +80,10 @@
     </div>
 
     <div class="b-example-divider"></div>
+    <c:if test="${confirmUser ne null}">
+        <p  class="alert-info">${confirmUser.name},${confirmUser.lastName}  was approved!</p>
+    </c:if>
+
 </main>
 <script src="/static/bootstrap.bundle.min.js"></script>
 

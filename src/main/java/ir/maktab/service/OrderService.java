@@ -1,6 +1,7 @@
 package ir.maktab.service;
 
 import ir.maktab.dto.*;
+import ir.maktab.service.exception.AccessException;
 import ir.maktab.service.exception.NotFoundCustomerException;
 import ir.maktab.service.exception.NotFoundOfferForOrder;
 import ir.maktab.service.exception.NotFoundOrderException;
@@ -18,7 +19,7 @@ public interface OrderService {
 
     void selectOffer(OrderDto orderDto, OfferDto dto) throws NotFoundOfferForOrder;
 
-    List<OrderDto> findOrdersBaseOnExpertSubServicesAndSituation(ExpertDto expertDto);
+    List<OrderDto> findOrdersBaseOnExpertSubServicesAndSituation(ExpertDto expertDto) throws AccessException;
 
     OrderDto findById(Integer id) throws NotFoundOrderException;
 
