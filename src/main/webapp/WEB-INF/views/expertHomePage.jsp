@@ -186,6 +186,9 @@
         <c:if test="${accessException ne null}">
             <p class="d">${accessException}</p>
         </c:if>
+        <c:if test="${notFoundOrder ne null}">
+            <p class="d">${notFoundOrder}</p>
+        </c:if>
     </div>
 </main>
 

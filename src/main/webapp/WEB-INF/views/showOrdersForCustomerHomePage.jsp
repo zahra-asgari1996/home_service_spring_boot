@@ -111,15 +111,15 @@
 <script>
     function sendOffer(id) {
         console.log("hello" + id)
-        window.location.href = "http://localhost:8739/comment/addComment/" + id;
+        window.location.href = "http://localhost:8080/comment/addComment/" + id;
     }
 
     function paymentFromAccountCredit(id) {
-        window.location.href = "http://localhost:8739/customer/paymentFromAccountCredit/" + id;
+        window.location.href = "http://localhost:8080/customer/paymentFromAccountCredit/" + id;
     }
 
     function onlinePayment(id) {
-        window.location.href = "http://localhost:8739/customer/onlinePayment/" + id;
+        window.location.href = "http://localhost:8080/customer/onlinePayment/" + id;
     }
 </script>
 </body>

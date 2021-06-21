@@ -12,6 +12,7 @@ import ir.maktab.dto.*;
 import ir.maktab.service.exception.AccessException;
 import ir.maktab.service.exception.NotFoundOfferForOrder;
 import ir.maktab.service.exception.NotFoundOrderException;
+import ir.maktab.service.exception.NotFoundOrderForExpertException;
 import ir.maktab.service.mapper.CustomerMapper;
 import ir.maktab.service.mapper.OrderMapper;
 import ir.maktab.service.mapper.SubServiceMapper;
@@ -108,12 +109,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> findOrdersBaseOnExpertSubServicesAndSituation(ExpertDto expertDto) throws AccessException {
+    public List<OrderDto> findOrdersBaseOnExpertSubServicesAndSituation(ExpertDto expertDto) throws AccessException,
+            NotFoundOrderForExpertException {
         Optional<Expert> expert = expertRepository.findByEmail(expertDto.getEmail());
         if (!expert.get().getSituation().equals(UserSituation.Accepted)){
             throw new AccessException(messageSource.getMessage("access.exception",null,new Locale("fa_ir")));
         }
         List<Orders> orders = repository.findOrdersBaseOnExpertSubServices(expert.get());
+        if (orders.size()==0){
+            throw new NotFoundOrderForExpertException(
+                    messageSource.getMessage("not.found.order.for.expert",null,new Locale("fa_ir")));
+        }
         return orders.stream().filter(i -> i.getSituation().equals(OrderSituation.Waiting_for_expert_suggestions))
                 .map(i -> mapper.toOrderDto(i)).collect(Collectors.toList());
     }

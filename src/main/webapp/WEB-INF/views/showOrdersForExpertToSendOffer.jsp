@@ -86,7 +86,7 @@
         // document.getElementById("link").href="/offer/sendOffer/ "+id;
         //document.getElementById("link").setAttribute("onclick", "location.href='http://localhost:8739'");
         console.log("hello" + id)
-        window.location.href = "http://localhost:8739/offer/sendOffer/" + id;
+        window.location.href = "http://localhost:8080/offer/sendOffer/" + id;
     }
 
     // function endOfWork(id) {

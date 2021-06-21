@@ -96,20 +96,20 @@
         // document.getElementById("link").href="/offer/sendOffer/ "+id;
         //document.getElementById("link").setAttribute("onclick", "location.href='http://localhost:8739'");
         console.log("hello" + id)
-        window.location.href = "http://localhost:8739/order/startWork/" + id;
+        window.location.href = "http://localhost:8080/order/startWork/" + id;
     }
 
     function endOfWork(id) {
         // document.getElementById("link").href="/offer/sendOffer/ "+id;
         //document.getElementById("link").setAttribute("onclick", "location.href='http://localhost:8739'");
         console.log("hello" + id)
-        window.location.href = "http://localhost:8739/order/endOfWork/" + id;
+        window.location.href = "http://localhost:8080/order/endOfWork/" + id;
     }
     function confirmPay(id) {
         // document.getElementById("link").href="/offer/sendOffer/ "+id;
         //document.getElementById("link").setAttribute("onclick", "location.href='http://localhost:8739'");
         console.log("hello" + id)
-        window.location.href = "http://localhost:8739/order/confirmPay/" + id;
+        window.location.href = "http://localhost:8080/order/confirmPay/" + id;
     }
 </script>
 </body>

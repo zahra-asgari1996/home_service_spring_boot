@@ -174,6 +174,11 @@
 
     <div class="b-example-divider"></div>
     <span class="fs-4">${error}</span>
+    <div>
+        <c:if test="${emptyOrderList ne null}">
+            <p class="d">${emptyOrderList}</p>
+        </c:if>
+    </div>
 
 </main>
 <script src="/static/bootstrap.bundle.min.js"></script>

@@ -166,4 +166,11 @@ public class CustomerController {
         }
         return "customerHomePage";
     }
+
+    @ExceptionHandler(value = NotFoundOrderException.class)
+    public String handleNotFoundOrder(Exception e,Model model){
+        model.addAttribute("emptyOrderList",e.getLocalizedMessage());
+        return "customerHomePage";
+
+    }
 }

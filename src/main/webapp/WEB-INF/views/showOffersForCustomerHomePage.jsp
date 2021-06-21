@@ -73,7 +73,7 @@
 <script>
     function selectOffer(id) {
         console.log("hello" + id)
-        window.location.href = "http://localhost:8739/offer/selectOffer/" + id;
+        window.location.href = "http://localhost:8080/offer/selectOffer/" + id;
     }
 </script>
 </body>

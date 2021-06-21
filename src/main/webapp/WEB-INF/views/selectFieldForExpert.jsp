@@ -12,6 +12,8 @@
 <html>
 <head>
     <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
 </head>
 <body>
@@ -36,7 +38,7 @@
                 <td>${list.basePrice}</td>
                 <td>${list.service.name}</td>
                 <td>
-                    <a onclick="selectField(${list.id});" href="#" id="link">select offer</a>
+                    <a onclick="selectField(${list.id});" href="#" id="link">select field</a>
                 </td>
             </tr>
         </c:forEach>
@@ -52,7 +54,7 @@
 <script>
     function selectField(id) {
         console.log("hello" + id)
-        window.location.href = "http://localhost:8739/expert/selectField/" + id;
+        window.location.href = "http://localhost:8080/expert/selectField/" + id;
     }
 </script>
 </body>
