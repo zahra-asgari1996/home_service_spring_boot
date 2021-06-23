@@ -6,13 +6,15 @@ import ir.maktab.dto.UserHistoryDto;
 import ir.maktab.service.exception.NotFoundExpertException;
 import ir.maktab.service.exception.NotFoundUserException;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface UserService {
     List<UserDto> fetchAllUsers();
 
-    void save(UserDto userDto);
-    void sendVerificationEmail(UserDto user, String siteURL);
+    void save(UserDto userDto,String siteURL) throws UnsupportedEncodingException, MessagingException;
+    void sendVerificationEmail(UserDto user, String siteURL) throws MessagingException, UnsupportedEncodingException;
 
     //    void changePassword(UserDto dto);
 //    List<UserDto> findByProperty(SearchCustomerDto dto);

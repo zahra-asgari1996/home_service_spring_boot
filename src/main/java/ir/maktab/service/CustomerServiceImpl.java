@@ -1,7 +1,10 @@
 package ir.maktab.service;
 
 import ir.maktab.data.domain.Customer;
+import ir.maktab.data.domain.Users;
+import ir.maktab.data.enums.UserSituation;
 import ir.maktab.data.repository.CustomerRepository;
+import ir.maktab.data.repository.UserRepository;
 import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.OrderDto;
 import ir.maktab.service.exception.DuplicatedEmailAddressException;
@@ -9,9 +12,16 @@ import ir.maktab.service.exception.InvalidPassword;
 import ir.maktab.service.exception.NotFoundCustomerException;
 import ir.maktab.service.mapper.CustomerMapper;
 import ir.maktab.service.mapper.OrderMapper;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.context.MessageSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -23,22 +33,82 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerMapper customerMapper;
     private final OrderMapper orderMapper;
     private final MessageSource messageSource;
+    private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender mailSender;
+    private final UserRepository repository;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper, OrderMapper orderMapper, MessageSource messageSource) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper, OrderMapper orderMapper, MessageSource messageSource, PasswordEncoder passwordEncoder, JavaMailSender mailSender, UserRepository repository) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
         this.orderMapper = orderMapper;
         this.messageSource = messageSource;
+        this.passwordEncoder = passwordEncoder;
+        this.mailSender = mailSender;
+        this.repository = repository;
     }
 
     @Override
-    public CustomerDto saveNewCustomer(CustomerDto dto) throws DuplicatedEmailAddressException {
+    public CustomerDto registerCustomer(CustomerDto dto,String siteURL) throws DuplicatedEmailAddressException, UnsupportedEncodingException, MessagingException {
         Optional<Customer> customer = customerRepository.findByEmail(dto.getEmail());
         if (customer.isPresent()) {
-            throw new DuplicatedEmailAddressException(messageSource.getMessage("duplicated.email.address",null,new Locale("fa_ir")));
+            throw new DuplicatedEmailAddressException(
+                    messageSource.getMessage("duplicated.email.address",null,new Locale("fa_ir")));
         }
+        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+        dto.setPassword(encodedPassword);
+
+        String randomCode = RandomString.make(64);
+        dto.setVerificationCode(randomCode);
+        dto.setEnabled(false);
+
         customerRepository.save(customerMapper.toCustomer(dto));
+        sendVerificationEmail(dto, siteURL);
         return dto;
+    }
+
+    @Override
+    public void sendVerificationEmail(CustomerDto dto, String siteURL)
+            throws UnsupportedEncodingException, MessagingException {
+        String toAddress = dto.getEmail();
+        String fromAddress = "zahra.asgr1996@gmail.com";
+        String senderName = "zahra asgari";
+        String subject = "Please verify your registration";
+        String content = "Dear [[name]],<br>"
+                + "Please click the link below to verify your registration:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "Thank you,<br>"
+                + "zahra asgari...";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", dto.getName());
+        String verifyURL = siteURL + "/customer/verify?code=" + dto.getVerificationCode();
+
+        content = content.replace("[[URL]]", verifyURL);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }
+
+    @Override
+    public boolean verify(String verificationCode) {
+        Users user = repository.findByVerificationCode(verificationCode);
+
+        if (user == null || user.isEnabled()) {
+            return false;
+        } else {
+            user.setVerificationCode(null);
+            user.setEnabled(true);
+            user.setUserSituation(UserSituation.Pending_approval);
+            repository.save(user);
+            return true;
+        }
     }
 
     @Override

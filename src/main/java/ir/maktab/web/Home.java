@@ -1,6 +1,8 @@
 package ir.maktab.web;
 
 import ir.maktab.dto.ManagerDto;
+import ir.maktab.service.UserService;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,5 +32,6 @@ public class Home {
         return "customerPage";
         //return new ModelAndView("customerPage", "customer", new CustomerDto());
     }
+
 
 }

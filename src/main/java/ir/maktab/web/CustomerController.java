@@ -11,15 +11,18 @@ import ir.maktab.service.validation.ChangePasswordValidation;
 import ir.maktab.service.validation.LoginValidation;
 import ir.maktab.service.validation.RegisterValidation;
 import org.springframework.context.MessageSource;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 
 @Controller
 @RequestMapping(value = "/customer")
@@ -39,17 +42,31 @@ public class CustomerController {
     }
 
     @PostMapping("/register")
-    public String saveNewCustomer(@ModelAttribute("customer") @Validated(RegisterValidation.class) CustomerDto customerDto, Model model)
-            throws DuplicatedEmailAddressException {
+    public String saveNewCustomer(@ModelAttribute("customer") @Validated(RegisterValidation.class) CustomerDto customerDto,
+                                  Model model,HttpServletRequest request)
+            throws DuplicatedEmailAddressException, UnsupportedEncodingException, MessagingException {
 
-        CustomerDto customer = customerService.saveNewCustomer(customerDto);
+        CustomerDto customer = customerService.registerCustomer(customerDto,getSiteURL(request));
         model.addAttribute("credit", customer.getCredit());
-        return "customerHomePage";
+        return "register_success";
+    }
+
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        return siteURL.replace(request.getServletPath(), "");
     }
 
     @GetMapping("/register")
     public ModelAndView goToRegisterPage() {
         return new ModelAndView("customerRegisterPage", "customer", new CustomerDto());
+    }
+    @GetMapping("/verify")
+    public String verifyUser(@Param("code") String code) {
+        if (customerService.verify(code)) {
+            return "verify_success";
+        } else {
+            return "verify_fail";
+        }
     }
 
 

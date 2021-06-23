@@ -26,6 +26,8 @@ public class CustomerMapperImpl implements CustomerMapper {
         customer.setUserSituation(dto.getUserSituation());
         customer.setDate(dto.getDate());
         customer.setCredit(dto.getCredit());
+        customer.setEnabled(dto.isEnabled());
+        customer.setVerificationCode(dto.getVerificationCode());
 //        customer.setComments(
 //                dto.getComments().stream().map
 //                        (i->commentMapper.toComment(i))
@@ -53,6 +55,8 @@ public class CustomerMapperImpl implements CustomerMapper {
         dto.setUserRole(customer.getUserRole());
         dto.setUserSituation(customer.getUserSituation());
         dto.setCredit(customer.getCredit());
+        dto.setVerificationCode(customer.getVerificationCode());
+        dto.setEnabled(customer.isEnabled());
         return dto;
     }
 }
