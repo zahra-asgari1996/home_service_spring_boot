@@ -40,34 +40,36 @@
 <body class="text-center">
 
 <div style="margin-right: 150px;margin-left: 150px">
-    <form:form modelAttribute="users" action="/user/searchUser" method="post">
+    <form:form modelAttribute="searchUser" >
         <h1 class="h3 mb-3 fw-normal">Search Users</h1>
 
         <div class="form-floating">
-            <form:input type="text" class="form-control" id="floatingInput" path="name" name="name"/>
-            <form:label for="floatingInput" path="name">Name</form:label>
-            <p class="text-danger">${name}</p>
+            <form:input type="number" class="form-control" id="floatingInput" path="maxPrice" name="maxPrice"/>
+            <form:label for="floatingInput" path="maxPrice">Max Price</form:label>
+            <p class="text-danger">${maxPrice}</p>
         </div>
         <div class="form-floating">
-            <form:input type="text" class="form-control" id="floatingPassword" path="lastName" name="lastName"/>
-            <form:label for="floatingPassword" path="lastName">Last Name</form:label>
-            <p class="text-danger">${lastName}</p>
+            <form:input type="number" class="form-control" id="floatingInput" path="minPrice" name="minPrice"/>
+            <form:label for="floatingInput" path="minPrice">Min Price</form:label>
+            <p class="text-danger">${minPrice}</p>
         </div>
         <div class="form-floating">
-            <form:input type="text" class="form-control" id="floatingPassword" path="email" name="email"/>
-            <form:label for="floatingPassword" path="email">Email</form:label>
-            <p class="text-danger">${email}</p>
+            <form:input type="date" class="form-control" id="floatingPassword" path="startDate" name="startDate"/>
+            <form:label for="floatingPassword" path="startDate">Start Date</form:label>
+            <p class="text-danger">${startDate}</p>
         </div>
         <div class="form-floating">
-            <form:input type="text" class="form-control" id="floatingPassword" path="rate" name="rate"/>
-            <form:label for="floatingPassword" path="rate">Rate</form:label>
-            <p class="text-danger">${rate}</p>
+            <form:input type="date" class="form-control" id="floatingPassword" path="endDate" name="endDate"/>
+            <form:label for="floatingPassword" path="endDate">End Date</form:label>
+            <p class="text-danger">${endDate}</p>
         </div>
+        <form:select path="situation">
+            <form:option value="NONE" label="Select"/>
+            <form:options items="${situationList}"/>
+        </form:select>
 
         <div class="form-floating">
-            Expert <form:checkbox path="role" value="Expert"></form:checkbox>
-            Customer <form:checkbox path="role" value="Customer"></form:checkbox>
-            <p class="text-danger">${rate}</p>
+
         </div>
         <p class="text-danger">${error}</p>
         <form:button class="w-100 btn btn-lg btn-primary" type="submit">Search</form:button>
@@ -89,10 +91,10 @@
                 <td>${list.name}</td>
                 <td>${list.lastName}</td>
                 <td>${list.email}</td>
-                <td>${list.userRole}</td>
+                <td>${list.role}</td>
                 <td>${list.date}</td>
                 <td>
-                    <c:if test="${list.userRole eq 'Expert' && list.userSituation eq 'Pending_approval'}">
+                    <c:if test="${list.role eq 'Expert' && list.situation eq 'Pending_approval'}">
                         <a onclick="confirmUser(${list.id});" href="#" id="link">Confirm User</a>
                     </c:if>
                 </td>

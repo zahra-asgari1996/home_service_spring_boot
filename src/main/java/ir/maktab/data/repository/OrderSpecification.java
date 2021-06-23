@@ -3,6 +3,7 @@ package ir.maktab.data.repository;
 import ir.maktab.data.domain.Orders;
 import ir.maktab.data.domain.Service;
 import ir.maktab.data.domain.SubService;
+import ir.maktab.data.enums.OrderSituation;
 import ir.maktab.dto.OrderHistoryFilterDto;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -21,13 +22,13 @@ public interface OrderSpecification {
             Join<Orders, SubService> subServiceJoin = root.join("subService");
             Join<SubService, Service> serviceJoin = subServiceJoin.join("service");
 
-            if (dto.getSituation() != null) {
+            if (!dto.getSituation().equals(OrderSituation.NONE)) {
                 predicates.add(criteriaBuilder.equal(root.get("situation"), dto.getSituation()));
             }
-            if (dto.getSubServiceName() != null) {
+            if (!dto.getSubServiceName().equals("NONE")) {
                 predicates.add(criteriaBuilder.equal(subServiceJoin.get("name"), dto.getSubServiceName()));
             }
-            if (dto.getServiceName() != null) {
+            if (!dto.getServiceName().equals("NONE")) {
                 predicates.add(criteriaBuilder.equal(serviceJoin.get("name"), dto.getServiceName()));
             }
             if (dto.getStartDate() != null) {

@@ -16,7 +16,7 @@ public class Customer extends Users {
     private List<Comments> comments = new ArrayList<>();
 
     public Customer() {
-        this.setRole(UserRole.Customer);
+        this.setUserRole(UserRole.Customer);
     }
 
 

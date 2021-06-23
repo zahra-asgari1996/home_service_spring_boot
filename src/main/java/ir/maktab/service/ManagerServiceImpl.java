@@ -7,6 +7,7 @@ import ir.maktab.service.exception.InvalidPassword;
 import ir.maktab.service.exception.NotFoundManagerException;
 import ir.maktab.service.mapper.ManagerMapper;
 import org.springframework.context.MessageSource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +20,13 @@ public class ManagerServiceImpl implements ManagerService {
     private final ManagerRepository repository;
     private final ManagerMapper mapper;
     private final MessageSource messageSource;
+    private final PasswordEncoder passwordEncoder;
 
-    public ManagerServiceImpl(ManagerRepository repository, ManagerMapper mapper, MessageSource messageSource) {
+    public ManagerServiceImpl(ManagerRepository repository, ManagerMapper mapper, MessageSource messageSource, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.mapper = mapper;
         this.messageSource = messageSource;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -62,7 +65,8 @@ public class ManagerServiceImpl implements ManagerService {
         Optional<Manager> manager = repository.findByUserName(dto.getUserName());
         if (manager.isPresent()) {
             Manager correctManager = manager.get();
-            if (correctManager.getPassword().equals(dto.getPassword())) {
+
+            if (passwordEncoder.matches(correctManager.getPassword(), dto.getPassword())) {
                 return mapper.toManagerDto(correctManager);
             } else {
                 throw new InvalidPassword(messageSource.getMessage("invalid.password",null,new Locale("fa_ir")));

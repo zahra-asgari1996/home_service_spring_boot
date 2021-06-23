@@ -5,6 +5,8 @@ import ir.maktab.dto.*;
 import ir.maktab.service.OfferService;
 import ir.maktab.service.OrderService;
 import ir.maktab.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ public class ManagerRestController {
     private final OrderService orderService;
     private final OfferService offerService;
     private final UserService userService;
+    private final static Logger logger= LogManager.getLogger(ExceptionControllerAdvise.class);
 
     public ManagerRestController(OrderService orderService, OfferService offerService, UserService userService) {
         this.orderService = orderService;
@@ -31,18 +34,20 @@ public class ManagerRestController {
     @PostMapping(value = "/filterOrders",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    private ResponseEntity<?> filterOrders(@RequestBody OrderHistoryFilterDto dto){
+    private ResponseEntity<List<OrderDto>> filterOrders(@RequestBody OrderHistoryFilterDto dto){
+        logger.info("rest method");
         List<OrderDto> list = orderService.filterOrders(dto);
+
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/filterOffers",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    private ResponseEntity<?> filterOffers(@RequestBody OfferHistoryDto dto){
-        List<OfferDto> list = offerService.filterOffers(dto);
-        return new ResponseEntity<>(list, HttpStatus.OK);
-    }
+//    @PostMapping(value = "/filterOffers",
+//            produces = MediaType.APPLICATION_JSON_VALUE,
+//            consumes = MediaType.APPLICATION_JSON_VALUE)
+//    private ResponseEntity<?> filterOffers(@RequestBody OfferHistoryDto dto){
+//        List<OfferDto> list = offerService.filterOffers(dto);
+//        return new ResponseEntity<>(list, HttpStatus.OK);
+//    }
 
     @PostMapping(value = "/filterUsers",
             produces = MediaType.APPLICATION_JSON_VALUE,

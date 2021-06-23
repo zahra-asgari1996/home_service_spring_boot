@@ -31,26 +31,11 @@ public class Users {
     private UserRole userRole;
     @Column
     private Double credit;
+    @Column(length = 64)
+    private String verificationCode;
+    private boolean enabled=false;
 
     public Users() {
-    }
-
-    public Double getCredit() {
-        return credit;
-    }
-
-    public Users setCredit(Double credit) {
-        this.credit = credit;
-        return this;
-    }
-
-    public UserRole getRole() {
-        return userRole;
-    }
-
-    public Users setRole(UserRole userRole) {
-        this.userRole = userRole;
-        return this;
     }
 
     public Integer getId() {
@@ -98,11 +83,11 @@ public class Users {
         return this;
     }
 
-    public UserSituation getSituation() {
+    public UserSituation getUserSituation() {
         return userSituation;
     }
 
-    public Users setSituation(UserSituation userSituation) {
+    public Users setUserSituation(UserSituation userSituation) {
         this.userSituation = userSituation;
         return this;
     }
@@ -113,6 +98,42 @@ public class Users {
 
     public Users setDate(Date date) {
         this.date = date;
+        return this;
+    }
+
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public Users setUserRole(UserRole userRole) {
+        this.userRole = userRole;
+        return this;
+    }
+
+    public Double getCredit() {
+        return credit;
+    }
+
+    public Users setCredit(Double credit) {
+        this.credit = credit;
+        return this;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public Users setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+        return this;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public Users setEnabled(boolean enabled) {
+        this.enabled = enabled;
         return this;
     }
 }

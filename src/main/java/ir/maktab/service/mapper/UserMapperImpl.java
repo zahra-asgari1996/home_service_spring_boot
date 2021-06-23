@@ -14,10 +14,11 @@ public class UserMapperImpl implements UserMapper {
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
-        user.setRole(dto.getRole());
-        user.setSituation(dto.getSituation());
         user.setDate(dto.getDate());
         user.setCredit(dto.getCredit());
+        user.setVerificationCode(dto.getVerificationCode());
+        user.setUserRole(dto.getUserRole());
+        user.setUserSituation(dto.getUserSituation());
         return user;
     }
 
@@ -30,9 +31,11 @@ public class UserMapperImpl implements UserMapper {
         dto.setEmail(user.getEmail());
         dto.setPassword(user.getPassword());
         dto.setDate(user.getDate());
-        dto.setRole(user.getRole());
-        dto.setSituation(user.getSituation());
         dto.setCredit(user.getCredit());
+        dto.setVerificationCode(user.getVerificationCode());
+        dto.setEnabled(user.isEnabled());
+        dto.setUserSituation(user.getUserSituation());
+        dto.setUserRole(user.getUserRole());
         return dto;
     }
 }

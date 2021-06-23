@@ -74,6 +74,7 @@
                 <li><a href="/user/searchUser" class="nav-link px-2 link-dark">Search Users</a></li>
                 <li><a href="/service/addNewService" class="nav-link px-2 link-dark">Add Service</a></li>
                 <li><a href="/subService/addNewSubService" class="nav-link px-2 link-dark">Add Sub Service</a></li>
+                <li><a href="/managerPage/orderHistoryPage" class="nav-link px-2 link-dark">Show Order History</a></li>
             </ul>
 
         </header>

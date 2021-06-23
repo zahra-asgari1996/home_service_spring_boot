@@ -27,7 +27,7 @@ public class Expert extends Users {
     private List<Offers> offers = new ArrayList<>();
     @OneToMany(mappedBy = "expert")
     private List<Comments> comments = new ArrayList<>();
-    @OneToMany
+    @OneToMany(mappedBy = "expert")
     private List<Orders> orders = new ArrayList<>();
     @Column
     private String field;
@@ -42,7 +42,7 @@ public class Expert extends Users {
     }
 
     public Expert() {
-        this.setRole(UserRole.Expert);
+        this.setUserRole(UserRole.Expert);
     }
 
 

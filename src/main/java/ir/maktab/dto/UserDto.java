@@ -30,6 +30,8 @@ public class UserDto {
     private Date date;
     private UserRole userRole;
     private Double credit;
+    private String verificationCode;
+    private boolean enabled=false;
 
     public UserDto() {
         this.credit = 0.0;
@@ -38,15 +40,6 @@ public class UserDto {
 
     public Integer getId() {
         return id;
-    }
-
-    public UserRole getRole() {
-        return userRole;
-    }
-
-    public UserDto setRole(UserRole userRole) {
-        this.userRole = userRole;
-        return this;
     }
 
     public UserDto setId(Integer id) {
@@ -90,11 +83,11 @@ public class UserDto {
         return this;
     }
 
-    public UserSituation getSituation() {
+    public UserSituation getUserSituation() {
         return userSituation;
     }
 
-    public UserDto setSituation(UserSituation userSituation) {
+    public UserDto setUserSituation(UserSituation userSituation) {
         this.userSituation = userSituation;
         return this;
     }
@@ -108,12 +101,39 @@ public class UserDto {
         return this;
     }
 
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public UserDto setUserRole(UserRole userRole) {
+        this.userRole = userRole;
+        return this;
+    }
+
     public Double getCredit() {
         return credit;
     }
 
     public UserDto setCredit(Double credit) {
         this.credit = credit;
+        return this;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public UserDto setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+        return this;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public UserDto setEnabled(boolean enabled) {
+        this.enabled = enabled;
         return this;
     }
 

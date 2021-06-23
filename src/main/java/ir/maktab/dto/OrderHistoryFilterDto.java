@@ -12,14 +12,6 @@ public class OrderHistoryFilterDto {
     private Date startDate;
     private Date endDate;
 
-    public OrderSituation getSituation() {
-        return situation;
-    }
-
-    public OrderHistoryFilterDto setSituation(OrderSituation situation) {
-        this.situation = situation;
-        return this;
-    }
 
     public String getServiceName() {
         return serviceName;
@@ -54,6 +46,15 @@ public class OrderHistoryFilterDto {
 
     public OrderHistoryFilterDto setEndDate(Date endDate) {
         this.endDate = endDate;
+        return this;
+    }
+
+    public OrderSituation getSituation() {
+        return situation;
+    }
+
+    public OrderHistoryFilterDto setSituation(OrderSituation situation) {
+        this.situation = situation;
         return this;
     }
 }

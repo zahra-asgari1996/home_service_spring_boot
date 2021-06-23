@@ -20,6 +20,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -112,7 +113,7 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDto> findOrdersBaseOnExpertSubServicesAndSituation(ExpertDto expertDto) throws AccessException,
             NotFoundOrderForExpertException {
         Optional<Expert> expert = expertRepository.findByEmail(expertDto.getEmail());
-        if (!expert.get().getSituation().equals(UserSituation.Accepted)){
+        if (!expert.get().getUserSituation().equals(UserSituation.Accepted)){
             throw new AccessException(messageSource.getMessage("access.exception",null,new Locale("fa_ir")));
         }
         List<Orders> orders = repository.findOrdersBaseOnExpertSubServices(expert.get());
@@ -200,6 +201,19 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDto> filterOrders(OrderHistoryFilterDto dto) {
         List<Orders> all = repository.findAll(Specification.where(OrderSpecification.filterOrders(dto)));
         return all.stream().map(i->mapper.toOrderDto(i)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> situations() {
+        List<String>  situations=new ArrayList<>();
+        situations.add("Waiting_for_expert_suggestions");
+        situations.add("Waiting_for_expert_selection");
+        situations.add("Waiting_for_expert_to_come");
+        situations.add("STARTED");
+        situations.add("DONE");
+        situations.add("paid");
+        situations.add("FINISHED");
+        return situations;
     }
 
 }

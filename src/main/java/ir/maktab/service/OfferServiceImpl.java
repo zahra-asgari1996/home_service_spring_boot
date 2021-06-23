@@ -169,12 +169,12 @@ public class OfferServiceImpl implements OfferService {
         expertService.updateExpert(expertMapper.toExpertDto(expert));
     }
 
-    @Override
-    public List<OfferDto> filterOffers(OfferHistoryDto dto) {
-        List<Offers> all = repository.findAll(Specification.where(OfferSpecification.filterOffers(dto)));
-        return all.stream().map(i->mapper.toOfferDto(i)).collect(Collectors.toList());
-    }
-
+//    @Override
+//    public List<OfferDto> filterOffers(OfferHistoryDto dto) {
+//        List<Offers> all = repository.findAll(Specification.where(OfferSpecification.filterOffers(dto)));
+//        return all.stream().map(i->mapper.toOfferDto(i)).collect(Collectors.toList());
+//    }
+//
 
     //return offerPrice.stream().filter(i -> i.getOrders().equals(orderDto)).map(i -> mapper.toOfferDto(i)).collect(Collectors.toList());
 //        Pageable pageable= PageRequest.of(offset,limit,Sort.Direction.ASC,"offerPrice");

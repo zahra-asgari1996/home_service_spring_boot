@@ -22,8 +22,8 @@ public class CustomerMapperImpl implements CustomerMapper {
         customer.setLastName(dto.getLastName());
         customer.setEmail(dto.getEmail());
         customer.setPassword(dto.getPassword());
-        customer.setRole(dto.getRole());
-        customer.setSituation(dto.getSituation());
+        customer.setUserRole(dto.getUserRole());
+        customer.setUserSituation(dto.getUserSituation());
         customer.setDate(dto.getDate());
         customer.setCredit(dto.getCredit());
 //        customer.setComments(
@@ -50,8 +50,8 @@ public class CustomerMapperImpl implements CustomerMapper {
         dto.setDate(customer.getDate());
 //        dto.setComments(customer.getComments().stream().map(i->commentMapper.toCommentDto(i)).collect(Collectors.toList()));
 //        dto.setOrders(customer.getOrders().stream().map(i->orderMapper.toOrderDto(i)).collect(Collectors.toList()));
-        dto.setRole(customer.getRole());
-        dto.setSituation(customer.getSituation());
+        dto.setUserRole(customer.getUserRole());
+        dto.setUserSituation(customer.getUserSituation());
         dto.setCredit(customer.getCredit());
         return dto;
     }

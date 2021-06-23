@@ -12,8 +12,8 @@ public class CustomerDto extends UserDto {
 
     public CustomerDto() {
         super.setCredit(0.0);
-        super.setRole(UserRole.Customer);
-        super.setSituation(UserSituation.New);
+        super.setUserRole(UserRole.Customer);
+        super.setUserSituation(UserSituation.New);
     }
 
     public List<OrderDto> getOrders() {
