@@ -7,9 +7,7 @@ import ir.maktab.service.validation.LoginValidation;
 import ir.maktab.service.validation.RegisterValidation;
 import ir.maktab.service.validation.ValidPassword;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.Objects;
 
@@ -28,6 +26,7 @@ public class UserDto {
     private String password;
     private UserSituation userSituation;
     private Date date;
+    @NotNull(message = "checkBox",groups = {LoginValidation.class})
     private UserRole userRole;
     private Double credit;
     private String verificationCode;

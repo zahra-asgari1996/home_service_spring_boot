@@ -9,14 +9,17 @@ import ir.maktab.service.exception.*;
 import ir.maktab.service.validation.LoginValidation;
 import ir.maktab.service.validation.RegisterValidation;
 import org.springframework.context.MessageSource;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 
 @Controller
 @RequestMapping(value = "/expert")
@@ -41,11 +44,24 @@ public class ExpertController {
 
 
     @PostMapping(value = "/register")
-    public String save(@ModelAttribute("expert") @Validated(RegisterValidation.class) ExpertDto expertDto,Model model)
-            throws DuplicatedEmailAddressException {
-        ExpertDto expert = expertService.saveNewExpert(expertDto);
+    public String registerExpert(@ModelAttribute("expert") @Validated(RegisterValidation.class) ExpertDto expertDto,
+                                 Model model,HttpServletRequest request)
+            throws DuplicatedEmailAddressException, UnsupportedEncodingException, MessagingException {
+        ExpertDto expert = expertService.registerExpert(expertDto,getSiteURL(request));
         model.addAttribute("credit",expert.getCredit());
-        return "expertHomePage";
+        return "register_success";
+    }
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        return siteURL.replace(request.getServletPath(), "");
+    }
+    @GetMapping("/verify")
+    public String verifyUser(@Param("code") String code) {
+        if (expertService.verify(code)) {
+            return "verify_success";
+        } else {
+            return "verify_fail";
+        }
     }
 
 

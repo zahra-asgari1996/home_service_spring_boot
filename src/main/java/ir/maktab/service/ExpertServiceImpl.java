@@ -2,8 +2,11 @@ package ir.maktab.service;
 
 import ir.maktab.data.domain.Expert;
 import ir.maktab.data.domain.SubService;
+import ir.maktab.data.domain.Users;
+import ir.maktab.data.enums.UserSituation;
 import ir.maktab.data.repository.ExpertRepository;
 import ir.maktab.data.repository.SubServiceRepository;
+import ir.maktab.data.repository.UserRepository;
 import ir.maktab.dto.ExpertDto;
 import ir.maktab.dto.SelectFieldForExpertDto;
 import ir.maktab.dto.SubServiceDto;
@@ -12,9 +15,16 @@ import ir.maktab.service.exception.InvalidPassword;
 import ir.maktab.service.exception.NotFoundExpertException;
 import ir.maktab.service.exception.NotFoundSubServiceException;
 import ir.maktab.service.mapper.ExpertMapper;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.context.MessageSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -27,24 +37,84 @@ public class ExpertServiceImpl implements ExpertService {
     private final ExpertMapper expertMapper;
     private final SubServiceRepository subServiceRepository;
     private final MessageSource messageSource;
+    private  final PasswordEncoder passwordEncoder;
+    private final JavaMailSender mailSender;
+    private final UserRepository userRepository;
 
     public ExpertServiceImpl(ExpertRepository expertRepository, ExpertMapper expertMapper, SubServiceRepository subServiceRepository,
-                             MessageSource messageSource) {
+                             MessageSource messageSource, PasswordEncoder passwordEncoder, JavaMailSender mailSender, UserRepository userRepository) {
         this.expertRepository = expertRepository;
         this.expertMapper = expertMapper;
         this.subServiceRepository = subServiceRepository;
         this.messageSource = messageSource;
+        this.passwordEncoder = passwordEncoder;
+        this.mailSender = mailSender;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public ExpertDto saveNewExpert(ExpertDto expert) throws DuplicatedEmailAddressException {
-        Optional<Expert> optionalExpert = expertRepository.findByEmail(expert.getEmail());
+    public ExpertDto registerExpert(ExpertDto dto,String siteURL) throws DuplicatedEmailAddressException,
+            UnsupportedEncodingException, MessagingException {
+        Optional<Expert> optionalExpert = expertRepository.findByEmail(dto.getEmail());
         if (optionalExpert.isPresent()) {
             throw new DuplicatedEmailAddressException(
                     messageSource.getMessage("duplicated.email.address",null,new Locale("fa_ir")));
         }
-        expertRepository.save(expertMapper.toExpert(expert));
-        return expert;
+        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+        dto.setPassword(encodedPassword);
+
+        String randomCode = RandomString.make(64);
+        dto.setVerificationCode(randomCode);
+        dto.setEnabled(false);
+
+        expertRepository.save(expertMapper.toExpert(dto));
+        sendVerificationEmail(dto, siteURL);
+        return dto;
+    }
+
+    @Override
+    public void sendVerificationEmail(ExpertDto dto, String siteURL) throws UnsupportedEncodingException, MessagingException {
+        String toAddress = dto.getEmail();
+        String fromAddress = "zahra.asgr1996@gmail.com";
+        String senderName = "zahra asgari";
+        String subject = "Please verify your registration";
+        String content = "Dear [[name]],<br>"
+                + "Please click the link below to verify your registration:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "Thank you,<br>"
+                + "zahra asgari...";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", dto.getName());
+        String verifyURL = siteURL + "/expert/verify?code=" + dto.getVerificationCode();
+
+        content = content.replace("[[URL]]", verifyURL);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
+
+    }
+
+    @Override
+    public boolean verify(String verificationCode) {
+        Users user = userRepository.findByVerificationCode(verificationCode);
+
+        if (user == null || user.isEnabled()) {
+            return false;
+        } else {
+            user.setVerificationCode(null);
+            user.setEnabled(true);
+            user.setUserSituation(UserSituation.Pending_approval);
+            userRepository.save(user);
+            return true;
+        }
     }
 
     @Override

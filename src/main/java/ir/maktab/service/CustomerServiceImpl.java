@@ -105,7 +105,6 @@ public class CustomerServiceImpl implements CustomerService {
         } else {
             user.setVerificationCode(null);
             user.setEnabled(true);
-            user.setUserSituation(UserSituation.Pending_approval);
             repository.save(user);
             return true;
         }
@@ -144,7 +143,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto loginCustomer(CustomerDto dto) throws InvalidPassword, NotFoundCustomerException {
         Optional<Customer> customer = customerRepository.findByEmail(dto.getEmail());
         if (customer.isPresent()) {
-            if (customer.get().getPassword().equals(dto.getPassword())) {
+            if (passwordEncoder.matches(customer.get().getPassword(), dto.getPassword())) {
                 return customerMapper.toCustomerDto(customer.get());
             } else {
                 throw new InvalidPassword(messageSource.getMessage("invalid.password",null,new Locale("fa_ir")));

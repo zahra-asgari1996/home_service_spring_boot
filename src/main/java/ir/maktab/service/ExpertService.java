@@ -1,5 +1,6 @@
 package ir.maktab.service;
 
+import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.ExpertDto;
 import ir.maktab.dto.SelectFieldForExpertDto;
 import ir.maktab.dto.SubServiceDto;
@@ -8,10 +9,14 @@ import ir.maktab.service.exception.InvalidPassword;
 import ir.maktab.service.exception.NotFoundExpertException;
 import ir.maktab.service.exception.NotFoundSubServiceException;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface ExpertService {
-    ExpertDto saveNewExpert(ExpertDto expert) throws DuplicatedEmailAddressException;
+    ExpertDto registerExpert(ExpertDto expert,String siteURL) throws DuplicatedEmailAddressException, UnsupportedEncodingException, MessagingException;
+    public void sendVerificationEmail(ExpertDto dto, String siteURL) throws UnsupportedEncodingException, MessagingException;
+    public boolean verify(String verificationCode);
 
     void deleteExpert(ExpertDto expert);
 
