@@ -4,7 +4,6 @@ import ir.maktab.data.domain.Expert;
 import ir.maktab.data.domain.Offers;
 import ir.maktab.data.enums.OfferSituation;
 import ir.maktab.data.enums.OrderSituation;
-import ir.maktab.data.repository.OfferSpecification;
 import ir.maktab.data.repository.OffersRepository;
 import ir.maktab.dto.*;
 import ir.maktab.service.exception.*;
@@ -13,7 +12,6 @@ import ir.maktab.service.mapper.OfferMapper;
 import ir.maktab.service.mapper.OrderMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

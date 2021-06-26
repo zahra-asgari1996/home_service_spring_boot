@@ -4,7 +4,7 @@ import ir.maktab.data.domain.Customer;
 import ir.maktab.data.domain.Expert;
 import ir.maktab.data.domain.Users;
 import ir.maktab.dto.FilterUsersDto;
-import ir.maktab.dto.UserHistoryDto;
+import ir.maktab.dto.FilterUsersBaseOnNumOfOrdersDto;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaQuery;
@@ -35,9 +35,6 @@ public interface UserSpecification {
             if (dto.getRate() != null) {
                 predicates.add(criteriaBuilder.greaterThan(expertRoot.get("rate"), dto.getRate()));
             }
-            if (dto.getField() != null) {
-                predicates.add(criteriaBuilder.equal(expertRoot.get("field"), dto.getField()));
-            }
 //            if (dto.getField()!=null || dto.getRate()!=null){
 //                query.select(expertRoot).where(predicates.toArray(new Predicate[0]));
 //            }if (dto.getName()!=null || dto.getLastName()!=null || dto.getEmail()!=null || dto.getRole()!=null){
@@ -52,47 +49,47 @@ public interface UserSpecification {
         };
     }
 
-    static Specification<Users> userHistory(UserHistoryDto dto){
-        return (root, criteriaQuery, criteriaBuilder) ->{
+    static Specification<Users> userHistory(FilterUsersBaseOnNumOfOrdersDto dto) {
+        return (root, criteriaQuery, criteriaBuilder) -> {
             CriteriaQuery<Users> query = criteriaBuilder.createQuery(Users.class);
-            List<Predicate> predicates=new ArrayList<>();
+            List<Predicate> predicates = new ArrayList<>();
             Subquery<Customer> customerSubquery = query.subquery(Customer.class);
             Subquery<Expert> expertSubquery = query.subquery(Expert.class);
             Root<Customer> customerRoot = customerSubquery.from(Customer.class);
             Root<Expert> expertRoot = expertSubquery.from(Expert.class);
             Subquery<Customer> customerSelect = customerSubquery.select(customerRoot.get("id"));
             Subquery<Expert> expertSelect = expertSubquery.select(expertRoot.get("id"));
-            Predicate customerPredicate = criteriaBuilder.isTrue(criteriaBuilder.literal(true));
-            Predicate expertPredicate = criteriaBuilder.isTrue(criteriaBuilder.literal(true));
+            List<Predicate> customerPredicate = new ArrayList<>();
+            List<Predicate> expertPredicate = new ArrayList<>();
 
-            if (dto.getStartDate()!=null){
-                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("date"),dto.getStartDate()));
+            if (dto.getStartDate() != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("date"), dto.getStartDate()));
             }
-            if (dto.getEndDate()!=null){
-                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("date"),dto.getEndDate()));
+            if (dto.getEndDate() != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("date"), dto.getEndDate()));
             }
-            if (dto.getMaxNumberOfOrders()!=null){
-                customerPredicate=criteriaBuilder.and(
-                        customerPredicate,criteriaBuilder.lessThanOrEqualTo(criteriaBuilder.size(customerRoot.get("orders")),dto.getMaxNumberOfOrders()));
+            if (dto.getMaxNumberOfOrders() != null) {
+                customerPredicate.add(criteriaBuilder.lessThanOrEqualTo(criteriaBuilder.size(customerRoot.get("orders")), dto.getMaxNumberOfOrders()));
 
-            }if (dto.getMinNumberOfOrders()!=null){
-                customerPredicate=criteriaBuilder.and(
-                        customerPredicate,criteriaBuilder.greaterThanOrEqualTo(criteriaBuilder.size(customerRoot.get("orders")),dto.getMinNumberOfOrders()));
-            }if (dto.getMaxNumberOfOffers()!=null){
-                expertPredicate=criteriaBuilder.and(
-                        expertPredicate,criteriaBuilder.lessThanOrEqualTo(criteriaBuilder.size(expertRoot.get("offers")), dto.getMaxNumberOfOffers()));
+            }
+            if (dto.getMinNumberOfOrders() != null) {
+
+                customerPredicate.add(criteriaBuilder.greaterThanOrEqualTo(criteriaBuilder.size(customerRoot.get("orders")), dto.getMinNumberOfOrders()));
+            }
+            if (dto.getMaxNumberOfOffers() != null) {
+
+                expertPredicate.add(criteriaBuilder.lessThanOrEqualTo(criteriaBuilder.size(expertRoot.get("offers")), dto.getMaxNumberOfOffers()));
             }
             if (dto.getMinNumberOfOffers() != null) {
-                expertPredicate=criteriaBuilder.and(
-                        expertPredicate,criteriaBuilder.greaterThanOrEqualTo(criteriaBuilder.size(expertRoot.get("offers")), dto.getMinNumberOfOffers())
-                );
+
+                expertPredicate.add(criteriaBuilder.greaterThanOrEqualTo(criteriaBuilder.size(expertRoot.get("offers")), dto.getMinNumberOfOffers()));
             }
-            if (customerPredicate.getExpressions().size()>0){
-                customerSelect.where(customerPredicate);
+            if (customerPredicate.size() > 0) {
+                customerSelect.where(customerPredicate.toArray(new Predicate[0]));
                 predicates.add(root.get("id").in(customerSubquery));
             }
-            if (expertPredicate.getExpressions().size()>0){
-                expertSelect.where(expertPredicate);
+            if (expertPredicate.size() > 0) {
+                expertSelect.where(expertPredicate.toArray(new Predicate[0]));
                 predicates.add(root.get("id").in(expertSubquery));
             }
             query.select(root).where(predicates.toArray(new Predicate[0]));
@@ -100,6 +97,8 @@ public interface UserSpecification {
 
         };
     }
+
+
 
 
 }

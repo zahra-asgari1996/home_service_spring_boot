@@ -2,7 +2,7 @@ package ir.maktab.service;
 
 import ir.maktab.dto.FilterUsersDto;
 import ir.maktab.dto.UserDto;
-import ir.maktab.dto.UserHistoryDto;
+import ir.maktab.dto.FilterUsersBaseOnNumOfOrdersDto;
 import ir.maktab.service.exception.NotFoundExpertException;
 import ir.maktab.service.exception.NotFoundUserException;
 
@@ -19,7 +19,7 @@ public interface UserService {
     //    void changePassword(UserDto dto);
 //    List<UserDto> findByProperty(SearchCustomerDto dto);
     List<UserDto> filterUsers(FilterUsersDto dto);
-    List<UserDto> userHistory(UserHistoryDto dto);
+    List<UserDto> userHistory(FilterUsersBaseOnNumOfOrdersDto dto) throws NotFoundUserException;
 
     UserDto confirmUser(Integer id) throws NotFoundExpertException;
     UserDto findById(Integer id) throws NotFoundUserException;

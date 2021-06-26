@@ -6,7 +6,7 @@ import ir.maktab.data.repository.UserRepository;
 import ir.maktab.data.repository.UserSpecification;
 import ir.maktab.dto.FilterUsersDto;
 import ir.maktab.dto.UserDto;
-import ir.maktab.dto.UserHistoryDto;
+import ir.maktab.dto.FilterUsersBaseOnNumOfOrdersDto;
 import ir.maktab.service.exception.NotFoundExpertException;
 import ir.maktab.service.exception.NotFoundUserException;
 import ir.maktab.service.mapper.UserMapper;
@@ -104,8 +104,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> userHistory(UserHistoryDto dto) {
-        return repository.findAll(UserSpecification.userHistory(dto)).stream().map(i->mapper.toUserDto(i)).collect(Collectors.toList());
+    public List<UserDto> userHistory(FilterUsersBaseOnNumOfOrdersDto dto) throws NotFoundUserException {
+        List<UserDto> collect =
+                repository.findAll(UserSpecification.userHistory(dto))
+                        .stream().map(i -> mapper.toUserDto(i)).collect(Collectors.toList());
+        if (collect.size()==0){
+            throw new NotFoundUserException(messageSource.getMessage("not.found.user",null,new Locale("fa_ir")));
+        }
+        return collect;
     }
 
     @Override

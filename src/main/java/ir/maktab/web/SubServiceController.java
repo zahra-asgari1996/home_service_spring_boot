@@ -10,6 +10,7 @@ import ir.maktab.service.SubServiceService;
 import ir.maktab.service.exception.DuplicatedDataException;
 import ir.maktab.service.exception.NotFoundServiceException;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,7 @@ public class SubServiceController {
     }
 
     @GetMapping("/addNewSubService")
+    @PreAuthorize("hasRole('MANAGER')")
     public String addNewSubService(Model model) {
         model.addAttribute("newSubService", new SubServiceDto());
         model.addAttribute("serviceList", service.fetchAllServices());
@@ -54,6 +56,7 @@ public class SubServiceController {
     }
 
     @GetMapping("/getSubService")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public String getSubServices(@RequestParam("service") String service, Model model,
                                  @SessionAttribute("serviceList") List<ServiceDto> serviceList
             , @SessionAttribute("newOrder") OrderDto dto,

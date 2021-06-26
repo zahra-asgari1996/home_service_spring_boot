@@ -10,6 +10,7 @@ import ir.maktab.service.exception.NotFoundCustomerException;
 import ir.maktab.service.exception.NotFoundOrderException;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -46,6 +47,7 @@ public class OrderController {
     }
 
     @GetMapping("/createOrder")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public String createOrder(Model model, HttpServletRequest request) {
         model.addAttribute("newOrder", new OrderDto());
         model.addAttribute("serviceList", service.fetchAllServices());
@@ -57,6 +59,7 @@ public class OrderController {
     }
 
     @PostMapping("/createOrder")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public String createNewOrder(@ModelAttribute("newOrder") @Valid OrderDto dto, HttpServletRequest request)
             throws NotFoundCustomerException {
         HttpSession session = request.getSession(false);
@@ -73,18 +76,21 @@ public class OrderController {
     }
 
     @GetMapping("/endOfWork/{id}")
+    @PreAuthorize("hasRole('EXPERT')")
     public String endOfWork(@PathVariable("id") Integer id) throws NotFoundOrderException {
         orderService.endOfWork(id);
         return "expertHomePage";
     }
 
     @GetMapping("/confirmPay/{id}")
+    @PreAuthorize("hasRole('EXPERT')")
     public String ConfirmPay(@PathVariable("id") Integer id) throws NotFoundOrderException {
         orderService.confirmPay(id);
         return "expertHomePage";
     }
 
     @GetMapping("/startWork/{id}")
+    @PreAuthorize("hasRole('EXPERT')")
     public String startWork(@PathVariable("id") Integer id) throws NotFoundOrderException {
         orderService.startWork(id);
         return "expertHomePage";

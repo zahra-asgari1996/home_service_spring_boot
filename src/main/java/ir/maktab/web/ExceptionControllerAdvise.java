@@ -8,13 +8,17 @@ import ir.maktab.service.exception.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -114,6 +118,11 @@ public class ExceptionControllerAdvise {
         return new ModelAndView(lastView, model);
     }
 
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(value= HttpStatus.NOT_FOUND)
+    public void handleNotFoundError(HttpServletResponse response, Exception ex) {
+        logger.error("URL not found exception: " );
+    }
 
 
 

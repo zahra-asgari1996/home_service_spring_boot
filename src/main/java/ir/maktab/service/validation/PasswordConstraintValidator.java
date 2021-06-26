@@ -32,7 +32,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
         List<String> msg = validator.getMessages(result);
         String messageTemplate = msg.stream()
                 .collect(Collectors.joining(","));
-        constraintValidatorContext.buildConstraintViolationWithTemplate("password")
+        constraintValidatorContext.buildConstraintViolationWithTemplate("password.exception")
                 .addConstraintViolation()
                 .disableDefaultConstraintViolation();
         return false;

@@ -12,7 +12,7 @@ public class CustomerDto extends UserDto {
 
     public CustomerDto() {
         super.setCredit(0.0);
-        super.setUserRole(UserRole.Customer);
+        super.setUserRole(UserRole.CUSTOMER);
         super.setUserSituation(UserSituation.New);
     }
 

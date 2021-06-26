@@ -10,6 +10,7 @@ import ir.maktab.service.validation.LoginValidation;
 import ir.maktab.service.validation.RegisterValidation;
 import org.springframework.context.MessageSource;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -40,6 +41,11 @@ public class ExpertController {
     @GetMapping("/register")
     public ModelAndView goToExpertRegisterPage() {
         return new ModelAndView("expertRegisterPage", "expert", new ExpertDto());
+    }
+
+    @GetMapping("/expertHomePage")
+    public String goToHomePage(){
+        return "expertHomePage";
     }
 
 
@@ -79,6 +85,7 @@ public class ExpertController {
     }
 
     @GetMapping("/changePassword")
+    @PreAuthorize("hasRole('EXPERT')")
     public String changePassword(Model model) {
         model.addAttribute("changePassword", new ExpertDto());
         return "expertPassChange";

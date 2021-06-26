@@ -65,9 +65,9 @@
         </div>
 
         <div class="form-floating">
-            Expert <form:checkbox path="role" value="Expert"></form:checkbox>
-            Customer <form:checkbox path="role" value="Customer"></form:checkbox>
-            <p class="text-danger">${rate}</p>
+            Expert <form:checkbox path="role" value="EXPERT"></form:checkbox>
+            Customer <form:checkbox path="role" value="CUSTOMER"></form:checkbox>
+            <p class="text-danger">${role}</p>
         </div>
         <p class="text-danger">${error}</p>
         <form:button class="w-100 btn btn-lg btn-primary" type="submit">Search</form:button>
@@ -92,7 +92,7 @@
                 <td>${list.userRole}</td>
                 <td>${list.date}</td>
                 <td>
-                    <c:if test="${list.userRole eq 'Expert' && list.userSituation eq 'Pending_approval'}">
+                    <c:if test="${list.userRole eq 'EXPERT' && list.userSituation eq 'Pending_approval'}">
                         <a onclick="confirmUser(${list.id});" href="#" id="link">Confirm User</a>
                     </c:if>
                 </td>

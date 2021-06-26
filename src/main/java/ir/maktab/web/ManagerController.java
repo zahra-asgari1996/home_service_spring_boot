@@ -1,8 +1,9 @@
 package ir.maktab.web;
 
 import ir.maktab.configuration.LastViewInterceptor;
+import ir.maktab.dto.FilterOrdersDto;
+import ir.maktab.dto.FilterSpecialUserOrdersDto;
 import ir.maktab.dto.ManagerDto;
-import ir.maktab.dto.OrderHistoryFilterDto;
 import ir.maktab.service.ManagerService;
 import ir.maktab.service.OrderService;
 import ir.maktab.service.ServiceService;
@@ -42,18 +43,25 @@ public class ManagerController {
     @PostMapping("/login")
     public String getSignIn(@ModelAttribute("manager") @Valid ManagerDto managerDto)
             throws NotFoundManagerException, InvalidPassword {
-
-        managerService.loginManager(managerDto);
+        //managerService.loginManager(managerDto);
         return "managerHomePage";
     }
     @GetMapping(value = "/orderHistoryPage")
     public String goToSearchInOrdersPage(Model model){
-        model.addAttribute("orderHistoryList",new OrderHistoryFilterDto());
+        model.addAttribute("orderHistoryList",new FilterOrdersDto());
         model.addAttribute("subServiceList",subServiceService.fetchAllSubServices());
         model.addAttribute("serviceList",serviceService.fetchAllServices());
         model.addAttribute("situationList",orderService.situations());
-        return "searchInOrderHistoryPage";
+        return "filterOrders";
     }
+
+    @GetMapping(value = "/filterUserBaseOnNumOfOrders")
+    public String goToFilterPage(){
+        return "filterUsersBaseOnNumOfOrders";
+    }
+
+
+
 
 
     @ExceptionHandler({NotFoundManagerException.class, InvalidPassword.class})

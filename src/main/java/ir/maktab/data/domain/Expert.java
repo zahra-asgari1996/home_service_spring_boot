@@ -42,7 +42,7 @@ public class Expert extends Users {
     }
 
     public Expert() {
-        this.setUserRole(UserRole.Expert);
+        this.setUserRole(UserRole.EXPERT);
     }
 
 

@@ -9,6 +9,7 @@ import ir.maktab.service.CommentService;
 import ir.maktab.service.ExpertService;
 import ir.maktab.service.exception.NotFoundExpertException;
 import ir.maktab.service.exception.NotFoundOrderException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ public class CommentController {
     }
 
     @GetMapping("/addComment/{id}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ModelAndView addComment(@PathVariable("id") Integer id) {
         CommentDto commentDto = new CommentDto();
         OrderDto orderDto = new OrderDto();
@@ -44,6 +46,7 @@ public class CommentController {
 
 
     @PostMapping("/addComment")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public String addComment(@ModelAttribute("comment") @Valid CommentDto dto)
             throws NotFoundOrderException {
 
@@ -53,6 +56,7 @@ public class CommentController {
 
 
     @GetMapping("/showRate")
+    @PreAuthorize("hasRole('EXPERT')")
     public String showRate(HttpServletRequest request, Model model)
             throws NotFoundExpertException {
 

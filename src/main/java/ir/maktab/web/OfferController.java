@@ -10,6 +10,7 @@ import ir.maktab.service.exception.NotFoundExpertException;
 import ir.maktab.service.exception.NotFoundOrderException;
 import ir.maktab.service.exception.NotSubServiceInExpertsListException;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,6 +35,7 @@ public class OfferController {
 
 
     @GetMapping("/sendOffer/{id}")
+    @PreAuthorize("hasRole('EXPERT')")
     public ModelAndView sendOffer(@PathVariable("id") Integer id, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         ExpertDto expert = (ExpertDto) session.getAttribute("expert");
@@ -51,7 +53,9 @@ public class OfferController {
         return new ModelAndView("createNewOfferPage", "newOffer", offerDto);
     }
 
+
     @PostMapping("/createOffer")
+    @PreAuthorize("hasRole('EXPERT')")
     public String createOffer(@ModelAttribute("newOffer") @Valid OfferDto dto, HttpServletRequest request)
             throws LessOfferPriceException,
             NotSubServiceInExpertsListException,
@@ -68,6 +72,7 @@ public class OfferController {
 
 
     @GetMapping("/selectOffer/{id}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public String changeSituation(@PathVariable("id") Integer id)
             throws NotFoundOrderException {
         offerService.changeSituation(id);

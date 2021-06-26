@@ -41,6 +41,11 @@ public class CustomerController {
         this.messageSource = messageSource;
     }
 
+    @GetMapping("/customerHomePage")
+    public String goToHomePage(){
+        return "customerHomePage";
+    }
+
     @PostMapping("/register")
     public String saveNewCustomer(@ModelAttribute("customer") @Validated(RegisterValidation.class) CustomerDto customerDto,
                                   Model model,HttpServletRequest request)

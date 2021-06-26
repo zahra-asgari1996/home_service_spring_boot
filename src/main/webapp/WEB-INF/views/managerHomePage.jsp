@@ -75,11 +75,11 @@
                 <li><a href="/service/addNewService" class="nav-link px-2 link-dark">Add Service</a></li>
                 <li><a href="/subService/addNewSubService" class="nav-link px-2 link-dark">Add Sub Service</a></li>
                 <li><a href="/managerPage/orderHistoryPage" class="nav-link px-2 link-dark">Show Order History</a></li>
+                <li><a href="/managerPage/filterUserBaseOnNumOfOrders" class="nav-link px-2 link-dark">show User History</a></li>
+                <li><a href="/managerLogout" class="nav-link px-2 link-dark">logout</a></li>
             </ul>
-
         </header>
     </div>
-
     <div class="b-example-divider"></div>
     <c:if test="${confirmUser ne null}">
         <p  class="alert-info">${confirmUser.name},${confirmUser.lastName}  was approved!</p>

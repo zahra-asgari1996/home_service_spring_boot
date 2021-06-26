@@ -51,7 +51,7 @@
         <div class="form-floating">
             <form:input type="text" class="form-control" id="floatingPassword" path="comment" name="comment"/>
             <form:label for="floatingPassword" path="comment">Comment</form:label>
-            <p class="text-danger">${comment}</p>
+<%--            <p class="text-danger">${comment}</p>--%>
         </div>
         <p class="text-danger">${error}</p>
         <form:button class="w-100 btn btn-lg btn-primary" type="submit">Add Comment</form:button>

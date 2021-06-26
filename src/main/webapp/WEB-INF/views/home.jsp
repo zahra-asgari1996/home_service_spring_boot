@@ -23,12 +23,7 @@
                 <li>
                     <a href="managerPage"><span class="fa fa-user mr-3"></span> Manager Page</a>
                 </li>
-                <li>
-                    <a href="customer"><span class="fa fa-user mr-3"></span> Customer Page</a>
-                </li>
-                <li>
-                    <a href="expert"><span class="fa fa-user mr-3"></span> Expert page</a>
-                </li>
+
                 <li>
                     <a href="/customer/register"><span class="fa fa-user mr-3"></span> Customer register</a>
                 </li>
@@ -36,7 +31,7 @@
                     <a href="/expert/register"><span class="fa fa-user mr-3"></span> Expert register</a>
                 </li>
                 <li>
-                    <a href="login"><span class="fa fa-user mr-3"></span> Login users</a>
+                    <a href="/userLogin"><span class="fa fa-user mr-3"></span> Login users</a>
                 </li>
             </ul>
 

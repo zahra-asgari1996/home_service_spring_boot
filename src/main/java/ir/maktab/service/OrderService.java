@@ -29,6 +29,8 @@ public interface OrderService {
 
     void startWork(Integer id) throws NotFoundOrderException;
 
-    List<OrderDto> filterOrders(OrderHistoryFilterDto dto);
+    List<OrderDto> filterOrders(FilterOrdersDto dto) throws NotFoundOrderException;
     List<String> situations();
+
+    List<OrderDto> filterUserOrders(FilterSpecialUserOrdersDto dto) throws NotFoundOrderException;
 }

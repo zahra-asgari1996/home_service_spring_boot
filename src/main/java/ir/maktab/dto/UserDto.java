@@ -22,11 +22,11 @@ public class UserDto {
     @Email(groups = {LoginValidation.class, RegisterValidation.class})
     @NotBlank(message = "email", groups = {LoginValidation.class, RegisterValidation.class})
     private String email;
-    @ValidPassword(message = "password",groups = {LoginValidation.class, RegisterValidation.class, ChangePasswordValidation.class})
+    @ValidPassword(message = "password.exception",groups = {LoginValidation.class, RegisterValidation.class, ChangePasswordValidation.class})
     private String password;
     private UserSituation userSituation;
     private Date date;
-    @NotNull(message = "checkBox",groups = {LoginValidation.class})
+   @NotNull(message = "checkBox",groups = {LoginValidation.class})
     private UserRole userRole;
     private Double credit;
     private String verificationCode;

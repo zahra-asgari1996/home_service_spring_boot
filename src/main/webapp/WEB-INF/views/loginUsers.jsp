@@ -41,23 +41,23 @@
 <body class="text-center">
 
 <main class="form-signin">
-    <form:form modelAttribute="loginUser" action="/login" method="post">
-        <h1 class="h3 mb-3 fw-normal">Manager Login Page</h1>
+    <form:form modelAttribute="loginUser" action="userLogin" method="post">
+        <h1 class="h3 mb-3 fw-normal">User Login Page</h1>
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
         <div class="form-floating">
-            <form:input type="text" class="form-control" id="floatingInput" path="email" name="email"/>
-            <form:label for="floatingInput" path="email">Email</form:label>
+            <form:input type="text" class="form-control" id="email" path="email" name="email"/>
+            <form:label for="email" path="email">Email</form:label>
             <p class="text-danger">${email}</p>
         </div>
         <div class="form-floating">
-            <form:input type="password" class="form-control" id="floatingPassword" path="password" name="password" />
-            <form:label for="floatingPassword" path="password">Password</form:label>
+            <form:input type="password" class="form-control" id="password" path="password" name="password" />
+            <form:label for="password" path="password">Password</form:label>
             <p class="text-danger">${password}</p>
         </div>
         <div class="form-floating">
-            Expert <form:checkbox path="userRole" value="Expert"/>
-            Customer <form:checkbox path="userRole" value="Customer"/>
+            Expert <form:checkbox path="userRole" value="EXPERT"/>
+            Customer <form:checkbox path="userRole" value="CUSTOMER"/>
             <p class="text-danger">${userRole}</p>
         </div>
         <p class="text-danger">${error}</p>

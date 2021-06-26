@@ -1,9 +1,13 @@
 package ir.maktab.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
-public class UserHistoryDto {
+public class FilterUsersBaseOnNumOfOrdersDto {
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date startDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date endDate;
     private Integer maxNumberOfOrders;
     private Integer minNumberOfOrders;
@@ -14,7 +18,7 @@ public class UserHistoryDto {
         return startDate;
     }
 
-    public UserHistoryDto setStartDate(Date startDate) {
+    public FilterUsersBaseOnNumOfOrdersDto setStartDate(Date startDate) {
         this.startDate = startDate;
         return this;
     }
@@ -23,7 +27,7 @@ public class UserHistoryDto {
         return endDate;
     }
 
-    public UserHistoryDto setEndDate(Date endDate) {
+    public FilterUsersBaseOnNumOfOrdersDto setEndDate(Date endDate) {
         this.endDate = endDate;
         return this;
     }
@@ -32,7 +36,7 @@ public class UserHistoryDto {
         return maxNumberOfOrders;
     }
 
-    public UserHistoryDto setMaxNumberOfOrders(Integer maxNumberOfOrders) {
+    public FilterUsersBaseOnNumOfOrdersDto setMaxNumberOfOrders(Integer maxNumberOfOrders) {
         this.maxNumberOfOrders = maxNumberOfOrders;
         return this;
     }
@@ -41,7 +45,7 @@ public class UserHistoryDto {
         return minNumberOfOrders;
     }
 
-    public UserHistoryDto setMinNumberOfOrders(Integer minNumberOfOrders) {
+    public FilterUsersBaseOnNumOfOrdersDto setMinNumberOfOrders(Integer minNumberOfOrders) {
         this.minNumberOfOrders = minNumberOfOrders;
         return this;
     }
@@ -50,7 +54,7 @@ public class UserHistoryDto {
         return maxNumberOfOffers;
     }
 
-    public UserHistoryDto setMaxNumberOfOffers(Integer maxNumberOfOffers) {
+    public FilterUsersBaseOnNumOfOrdersDto setMaxNumberOfOffers(Integer maxNumberOfOffers) {
         this.maxNumberOfOffers = maxNumberOfOffers;
         return this;
     }
@@ -59,7 +63,7 @@ public class UserHistoryDto {
         return minNumberOfOffers;
     }
 
-    public UserHistoryDto setMinNumberOfOffers(Integer minNumberOfOffers) {
+    public FilterUsersBaseOnNumOfOrdersDto setMinNumberOfOffers(Integer minNumberOfOffers) {
         this.minNumberOfOffers = minNumberOfOffers;
         return this;
     }

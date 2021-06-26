@@ -21,7 +21,7 @@ public class ExpertDto extends UserDto {
 
     public ExpertDto() {
         super.setCredit(0.0);
-        super.setUserRole(UserRole.Expert);
+        super.setUserRole(UserRole.EXPERT);
         super.setUserSituation(UserSituation.New);
         this.rate=0.0;
     }

@@ -4,7 +4,7 @@ import ir.maktab.data.domain.Orders;
 import ir.maktab.data.domain.Service;
 import ir.maktab.data.domain.SubService;
 import ir.maktab.data.enums.OrderSituation;
-import ir.maktab.dto.OrderHistoryFilterDto;
+import ir.maktab.dto.FilterOrdersDto;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface OrderSpecification {
 
-    static Specification<Orders> filterOrders(OrderHistoryFilterDto dto) {
+    static Specification<Orders> filterOrders(FilterOrdersDto dto) {
         return (root, criteriaQuery, criteriaBuilder) -> {
             CriteriaQuery<Orders> query = criteriaBuilder.createQuery(Orders.class);
             List<Predicate> predicates = new ArrayList<>();

@@ -8,10 +8,10 @@ import javax.validation.constraints.Size;
 
 public class ManagerDto {
     private Integer id;
-    @NotBlank(message = "userName")
-    @Size(min = 2, max = 10, message = "userName")
+    @NotBlank(message = "userName.exception")
+    @Size(min = 2, max = 10, message = "userName.exception")
     private String userName;
-    @ValidPassword(message = "password")
+    @ValidPassword(message = "password.exception")
     private String password;
 
     public Integer getId() {

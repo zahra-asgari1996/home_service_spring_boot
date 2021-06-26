@@ -8,9 +8,9 @@ import java.util.Optional;
 
 @Repository
 public interface ExpertRepository extends JpaRepository<Expert, Integer> {
-    //    void saveNewExpert(Expert expert);
-//    void deleteExpert(Expert expert);
-//    void updateExpert(Expert expert);
-//    List<Expert> fetchAllExperts();
+    //    void saveNewExpert(EXPERT expert);
+//    void deleteExpert(EXPERT expert);
+//    void updateExpert(EXPERT expert);
+//    List<EXPERT> fetchAllExperts();
     Optional<Expert> findByEmail(String email);
 }

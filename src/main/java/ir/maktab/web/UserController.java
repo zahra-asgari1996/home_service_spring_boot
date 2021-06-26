@@ -3,7 +3,7 @@ package ir.maktab.web;
 import ir.maktab.configuration.LastViewInterceptor;
 import ir.maktab.dto.FilterUsersDto;
 import ir.maktab.dto.UserDto;
-import ir.maktab.dto.UserOrdersFilterDto;
+import ir.maktab.dto.FilterSpecialUserOrdersDto;
 import ir.maktab.service.OrderService;
 import ir.maktab.service.UserService;
 import ir.maktab.service.exception.NotFoundExpertException;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping(value = "user")
-@SessionAttributes("searchUser")
+@SessionAttributes({"searchUser","filterUserOrders"})
 public class UserController {
     private final UserService userService;
     private final MessageSource messageSource;
@@ -41,14 +41,14 @@ public class UserController {
 
     @PostMapping(value = "/searchUser")
     public ModelAndView searchUsers(@ModelAttribute("users") FilterUsersDto dto) {
-        return new ModelAndView("searchUsersPage", "usersList", userService.filterUsers(dto));
+        return new ModelAndView("filterUsers", "usersList", userService.filterUsers(dto));
 
     }
 
     @GetMapping(value = "/searchUser")
     public String searchUsers(Model model) {
         model.addAttribute("users", new FilterUsersDto());
-        return "searchUsersPage";
+        return "filterUsers";
     }
 
     @GetMapping(value = "/confirmUser/{id}")
@@ -61,12 +61,14 @@ public class UserController {
     @GetMapping(value = "/searchUser/{id}")
     public String searchUser(Model model,@PathVariable("id") Integer id) throws  NotFoundUserException {
         UserDto userDto = userService.findById(id);
-        UserOrdersFilterDto dto = new UserOrdersFilterDto();
-        dto.setId(userDto.getId());
-        model.addAttribute("searchUser",dto);
+        FilterSpecialUserOrdersDto dto = new FilterSpecialUserOrdersDto();
+        dto.setUserId(userDto.getId());
+        dto.setRole(userDto.getUserRole());
+        model.addAttribute("filterUserOrders",dto);
         model.addAttribute("situationList",orderService.situations());
-        return "searchInUserOrdersPage";
+        return "filterSpecialUserOrders";
     }
+
 
     @ExceptionHandler(value = NotFoundExpertException.class)
     public String handleException(Exception e, Model model, HttpServletRequest request){
