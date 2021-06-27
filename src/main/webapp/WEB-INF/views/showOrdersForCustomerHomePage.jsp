@@ -37,6 +37,7 @@
             <td colspan="2">Add Comment</td>
             <td colspan="2">Account Balance Payment</td>
             <td colspan="2">Online Payment</td>
+            <td colspan="2">Show Offers</td>
         </tr>
         </thead>
         <tbody>
@@ -68,6 +69,12 @@
                 <td rowspan="4">
                     <c:if test="${list.situation eq 'DONE'}">
                         <a onclick="onlinePayment(${list.id});" href="#" id="onlinePayment">Online Payment</a>
+
+                    </c:if>
+                </td>
+                <td rowspan="4">
+                    <c:if test="${list.situation eq 'Waiting_for_expert_selection'}">
+                        <a onclick="showOffers(${list.id});" href="#" id="showOffers">Show Offers</a>
 
                     </c:if>
                 </td>
@@ -104,7 +111,7 @@
 <footer class="footer mt-auto py-3 bg-light">
     <div class="container">
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="/customer" class="nav-link px-2 link-secondary">Customer Home Page</a></li>
+            <li><a href="/customer/customerHomePage" class="nav-link px-2 link-secondary">Customer Home Page</a></li>
         </ul>
     </div>
 </footer>
@@ -120,6 +127,10 @@
 
     function onlinePayment(id) {
         window.location.href = "http://localhost:8080/customer/onlinePayment/" + id;
+    }
+
+    function showOffers(id) {
+        window.location.href = "http://localhost:8080/customer/showOffers/" + id;
     }
 </script>
 </body>

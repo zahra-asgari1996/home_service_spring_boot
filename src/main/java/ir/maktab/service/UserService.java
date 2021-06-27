@@ -1,6 +1,7 @@
 package ir.maktab.service;
 
 import ir.maktab.dto.FilterUsersDto;
+import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.UserDto;
 import ir.maktab.dto.FilterUsersBaseOnNumOfOrdersDto;
 import ir.maktab.service.exception.NotFoundExpertException;
@@ -23,4 +24,6 @@ public interface UserService {
 
     UserDto confirmUser(Integer id) throws NotFoundExpertException;
     UserDto findById(Integer id) throws NotFoundUserException;
+
+
 }

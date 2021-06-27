@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Controller
@@ -48,9 +49,10 @@ public class SubServiceController {
     }
 
     @PostMapping("/addNewSubService")
-    public String addNewSubService(@ModelAttribute("newSubService") @Valid SubServiceDto dto) throws DuplicatedDataException,
+    public String addNewSubService(@ModelAttribute("newSubService") @Valid SubServiceDto dto,Model model) throws DuplicatedDataException,
             NotFoundServiceException {
         subServiceService.saveNewSubService(dto);
+        model.addAttribute("successAlert",messageSource.getMessage("add.new.sub.service",null,new Locale("en_us")));
         return "managerHomePage";
 
     }

@@ -11,7 +11,11 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.83.1">
-    <title>Add New Service</title>
+<%--    <link rel="stylesheet" href="<c:url value="/static/dist/css/mapp.min.css" />">--%>
+<%--    <link rel="stylesheet" href="<c:url value="/static/dist/css/fa/style.css"/>" data-locale="true">--%>
+<%--    <link rel="stylesheet" href="<c:url value="/static/dist/app.css"/>">--%>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>new_order</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
 
@@ -40,9 +44,8 @@
     <link href="/static/loginPageStyleSheet.css" rel="stylesheet">
 </head>
 <body class="text-center">
-
 <main class="form-signin">
-    <h1 class="h3 mb-3 fw-normal">Add New Service</h1>
+    <h1 class="h3 mb-3 fw-normal">Create New Order</h1>
     <form action="/subService/getSubService" method="get" id="serviceForm">
         <select name="service" onchange="submitForm()">
             <option value="NONE" label="${selectedService}">${selectedService}</option>
@@ -55,13 +58,15 @@
     </form>
     <form:form modelAttribute="newOrder" method="post" action="/order/createOrder">
         <div class="form-floating">
-            <form:input type="number" class="form-control" id="floatingPassword" path="proposedPrice" name="proposedPrice"/>
+            <form:input type="number" class="form-control" id="floatingPassword" path="proposedPrice"
+                        name="proposedPrice"/>
             <form:label for="floatingPassword" path="proposedPrice">Proposed Price</form:label>
             <p class="text-danger">${proposedPrice}</p>
         </div>
 
         <div class="form-floating">
-            <form:input type="text" class="form-control" id="floatingPassword" path="jobDescription" name="jobDescription"/>
+            <form:input type="text" class="form-control" id="floatingPassword" path="jobDescription"
+                        name="jobDescription"/>
             <form:label for="floatingPassword" path="jobDescription">Job Description</form:label>
             <p class="text-danger">${jobDescription}</p>
         </div>
@@ -98,7 +103,11 @@
         <p class="text-danger">${error}</p>
         <form:button class="w-100 btn btn-lg btn-primary" type="submit">Create</form:button>
     </form:form>
+    <div id="app"></div>
+    <a href="/mapp">mapp</a>
 </main>
+
+
 <script>
     function submitForm() {
         console.log("success")
@@ -106,6 +115,14 @@
         console.log("error")
     }
 </script>
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
+            <li><a href="/customer/customerHomePage" class="nav-link px-2 link-secondary">Customer Home Page</a></li>
+        </ul>
+    </div>
+</footer>
 </body>
 </html>
 

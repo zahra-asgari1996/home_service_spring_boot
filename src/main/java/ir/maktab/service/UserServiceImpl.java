@@ -2,9 +2,11 @@ package ir.maktab.service;
 
 import ir.maktab.data.domain.Users;
 import ir.maktab.data.enums.UserSituation;
+import ir.maktab.data.repository.OrderRepository;
 import ir.maktab.data.repository.UserRepository;
 import ir.maktab.data.repository.UserSpecification;
 import ir.maktab.dto.FilterUsersDto;
+import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.UserDto;
 import ir.maktab.dto.FilterUsersBaseOnNumOfOrdersDto;
 import ir.maktab.service.exception.NotFoundExpertException;
@@ -134,17 +136,5 @@ public class UserServiceImpl implements UserService {
         return mapper.toUserDto(optionalUser.get());
     }
 
-//    @Override
-//    public void changePassword(UserDto dto) {
-//        repository.changePassword(mapper.toUser(dto));
-//
-//    }
-//
-//    @Override
-//    public List<UserDto> findByProperty(SearchCustomerDto dto) {
-//
-//        return repository.findByProperty(dto)
-//                .stream().map
-//                        (i->mapper.toUserDto(i)).collect(Collectors.toList());
-//    }
+
 }

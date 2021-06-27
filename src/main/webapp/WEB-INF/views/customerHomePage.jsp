@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.83.1">
-    <title>Customer Home Page</title>
+    <title>customer_home_page</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sidebars/">
 
@@ -35,7 +35,7 @@
     <!-- Custom styles for this template -->
     <link href="/static/sidebars.css" rel="stylesheet">
 </head>
-<body>
+<body onload="alert()">
 
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <symbol id="bootstrap" viewBox="0 0 118 94">
@@ -137,34 +137,18 @@
                     Show Orders
                 </a>
             </li>
-            <li>
-                <a href="/customer/showOffers" class="nav-link link-dark">
-                    <svg class="bi me-2" width="16" height="16">
-                        <use xlink:href="#table"/>
-                    </svg>
-                    Show Offers
-                </a>
-            </li>
         </ul>
         <hr>
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
                id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
                 <strong>
-                    <c:if test="${customer ne null}">
-                        <p>${customer.email}</p>
-                    </c:if>
-
-                    <c:if test="${loginCustomer ne null}">
-                        <p>${loginCustomer.email}</p>
-
-                    </c:if>
-
+                    <p>${customer.email}</p>
                 </strong>
             </a>
             <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
                 <li><a class="dropdown-item" href="/customer/changePassword">Change Password</a></li>
-                <li><a class="dropdown-item" href="#">credit:${credit}</a></li>
+                <li><a class="dropdown-item"  href="/customer/balance"> balance : ${balance}</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
@@ -175,15 +159,29 @@
     <div class="b-example-divider"></div>
     <span class="fs-4">${error}</span>
     <div>
-        <c:if test="${emptyOrderList ne null}">
-            <p class="d">${emptyOrderList}</p>
+        <c:if test="${successAlert ne null}">
+            <blockquote class="blockquote">
+                <p style="  margin: auto;width: 100%;border: 3px solid green;padding: 10px;"
+                   class="mb-0">${successAlert}</p>
+            </blockquote>
         </c:if>
     </div>
 
+
 </main>
 <script src="/static/bootstrap.bundle.min.js"></script>
-
 <script src="/static/sidebars.js"></script>
+<script>
+    function alert() {
+        if (${error ne null}) {
+            console.log("error")
+            alert(${error})
+        }
+        <c:if test="${successAlert}">
+        alert(${successAlert})
+        </c:if>
+    }
+</script>
 </body>
 </html>
 

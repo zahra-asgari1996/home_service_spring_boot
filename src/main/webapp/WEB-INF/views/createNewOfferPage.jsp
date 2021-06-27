@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.83.1">
-    <title>Add Comment</title>
+    <title>new_offer</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
 
@@ -62,7 +62,14 @@
         <form:button class="w-100 btn btn-lg btn-primary" type="submit">Create</form:button>
     </form:form>
 </main>
-
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
+            <li><a href="/expert/expertHomePage" class="nav-link px-2 link-secondary">Expert Home Page</a></li>
+        </ul>
+    </div>
+</footer>
 </body>
 </html>
 

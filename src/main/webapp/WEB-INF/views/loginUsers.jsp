@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.83.1">
-    <title>Manager Login Page</title>
+    <title>login</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
 
@@ -41,7 +41,7 @@
 <body class="text-center">
 
 <main class="form-signin">
-    <form:form modelAttribute="loginUser" action="userLogin" method="post">
+    <form:form modelAttribute="loginUser" action="/userLogin" method="post">
         <h1 class="h3 mb-3 fw-normal">User Login Page</h1>
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
@@ -55,16 +55,17 @@
             <form:label for="password" path="password">Password</form:label>
             <p class="text-danger">${password}</p>
         </div>
-        <div class="form-floating">
-            Expert <form:checkbox path="userRole" value="EXPERT"/>
-            Customer <form:checkbox path="userRole" value="CUSTOMER"/>
-            <p class="text-danger">${userRole}</p>
-        </div>
         <p class="text-danger">${error}</p>
         <form:button class="w-100 btn btn-lg btn-primary" type="submit">Login</form:button>
     </form:form>
 </main>
-
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
+        </ul>
+    </div>
+</footer>
 </body>
 </html>
 

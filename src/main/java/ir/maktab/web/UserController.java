@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
 
 @Controller
 @RequestMapping(value = "user")
@@ -55,6 +56,7 @@ public class UserController {
     public String confirmUser(Model model,@PathVariable("id") Integer id) throws NotFoundExpertException {
         UserDto confirmUser = userService.confirmUser(id);
         model.addAttribute("confirmUser",confirmUser);
+        model.addAttribute("successAlert",messageSource.getMessage("confirm.user",null,new Locale("en_us")));
         return "managerHomePage";
     }
 

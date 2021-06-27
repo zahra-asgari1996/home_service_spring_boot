@@ -2,7 +2,6 @@ package ir.maktab.service;
 
 import ir.maktab.data.domain.Customer;
 import ir.maktab.data.domain.Users;
-import ir.maktab.data.enums.UserSituation;
 import ir.maktab.data.repository.CustomerRepository;
 import ir.maktab.data.repository.UserRepository;
 import ir.maktab.dto.CustomerDto;
@@ -157,7 +156,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void changePassword(CustomerDto dto) {
         Optional<Customer> customer = customerRepository.findByEmail(dto.getEmail());
         Customer customer1 = customer.get();
-        customer1.setPassword(dto.getPassword());
+        customer1.setPassword(passwordEncoder.encode(dto.getPassword()));
         customerRepository.save(customer1);
     }
 
@@ -165,5 +164,11 @@ public class CustomerServiceImpl implements CustomerService {
     public List<OrderDto> showOrders(CustomerDto dto) {
         Optional<Customer> customer = customerRepository.findByEmail(dto.getEmail());
         return customer.get().getOrders().stream().map(i->orderMapper.toOrderDto(i)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Double getBalance(CustomerDto user) {
+        Optional<Customer> customer = customerRepository.findByEmail(user.getEmail());
+        return customer.get().getCredit();
     }
 }

@@ -66,7 +66,7 @@
 <footer class="footer mt-auto py-3 bg-light">
     <div class="container">
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="/customer" class="nav-link px-2 link-secondary">Customer Home Page</a></li>
+            <li><a href="/customer/customerHomePage" class="nav-link px-2 link-secondary">Customer Home Page</a></li>
         </ul>
     </div>
 </footer>

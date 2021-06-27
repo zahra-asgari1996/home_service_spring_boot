@@ -17,7 +17,7 @@ public interface OfferService {
 
     List<OfferDto> fetchAllOffers();
 
-    List<OfferDto> getOrderOffersSortByRateAndPrice(CustomerDto dto ) throws NotFoundCustomerException, NotFoundOrderException;
+    List<OfferDto> getOrderOffersSortByRateAndPrice(CustomerDto dto,Integer id ) throws NotFoundCustomerException, NotFoundOrderException, NotFoundOfferForOrder;
     void changeSituation(Integer id) throws NotFoundOrderException;
     OfferDto paymentFromAccountCredit(Integer id,CustomerDto dto) throws NotFoundOrderException, NotFoundCustomerException, NotEnoughAccountBalance;
 

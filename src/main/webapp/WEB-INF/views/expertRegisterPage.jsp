@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.83.1">
-    <title>Expert Register Page</title>
+    <title>expert_register</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
 
@@ -86,6 +86,13 @@
         }
     }
 </script>
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
+        </ul>
+    </div>
+</footer>
 </body>
 </html>
 

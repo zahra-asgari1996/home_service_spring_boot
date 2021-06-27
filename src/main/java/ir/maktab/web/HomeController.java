@@ -12,16 +12,15 @@ import ir.maktab.service.validation.LoginValidation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@SessionAttributes("user")
 public class HomeController  implements ErrorController {
     private final CustomerService customerService;
     private final ExpertService expertService;
@@ -41,6 +40,9 @@ public class HomeController  implements ErrorController {
     public String goToHome() {
         return "home";
     }
+
+
+
 
     @GetMapping(value = "/managerPage")
     public ModelAndView goToLoginManagerPage() {
@@ -66,38 +68,37 @@ public class HomeController  implements ErrorController {
         return new ModelAndView("loginUsers", "loginUser", new UserDto());
     }
 
-    @PostMapping("/userLogin")
-    public String loginUsers(@ModelAttribute("loginUser") @Validated(LoginValidation.class) UserDto userDto)
-            throws NotFoundExpertException, InvalidPassword, NotFoundCustomerException {
-        logger.info("post method");
-        logger.info(userDto);
+//    @GetMapping("/customerHomePage")
+//    @PreAuthorize("hasRole('CUSTOMER')")
+//    public String goToHomePage(){
+//        return "customerHomePage";
+//    }
 
-        if (userDto.getUserRole().equals(UserRole.EXPERT)) {
-//            ExpertDto expertDto = new ExpertDto();
-//            expertDto.setEmail(userDto.getEmail());
-//            expertDto.setPassword(userDto.getPassword());
-//            expertDto.setUserRole(UserRole.EXPERT);
-//            expertService.loginExpert(expertDto);
-            logger.info("expert page");
-            return "expertHomePage";
-        }
-        if (userDto.getUserRole().equals(UserRole.CUSTOMER)) {
-//            CustomerDto customerDto = new CustomerDto();
-//            customerDto.setEmail(userDto.getEmail());
-//            customerDto.setPassword(userDto.getPassword());
-//            customerDto.setUserRole(UserRole.CUSTOMER);
-//            customerService.loginCustomer(customerDto);
-            logger.info("customer page");
-            return "customerHomePage";
-        }
-        return "home";
-    }
+//    @PostMapping("/userLogin")
+//    public String loginUsers(@ModelAttribute("loginUser") @Validated(LoginValidation.class) UserDto userDto,Model model)
+//            throws NotFoundExpertException, InvalidPassword, NotFoundCustomerException {
+//        model.addAttribute("user",userDto);
+//        if (userDto.getUserRole().equals(UserRole.EXPERT)) {
+//            logger.info("expert page");
+//            return "expertHomePage";
+//        }
+//        if (userDto.getUserRole().equals(UserRole.CUSTOMER)) {
+//            logger.info("customer page");
+//            return "customerHomePage";
+//        }
+//        return "home";
+//    }
 
     @GetMapping("/loginFailed")
     public ModelAndView errorHandler(Model model){
         model.addAttribute("error","your information is not correct");
         logger.warn("your information is not correct");
         return new ModelAndView("loginUsers", "loginUser", new UserDto());
+    }
+
+    @GetMapping("/mapp")
+    public String goToMapp() {
+        return "mapp";
     }
 
 }

@@ -33,15 +33,11 @@ public class ManagerSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.requestMatchers()
                 .antMatchers("/managerPage/**","/service/**","/subService/addNewSubService","/user/**","/managerRestController/**")
-//                .antMatcher("/managerPage/**")
-//                .antMatcher("/service/**")
-//                .antMatcher("/subService/addNewSubService")
-//                .antMatcher("/user/**")
+
                 .and()
                 .csrf().disable().authorizeRequests()
-                .antMatchers("/", "/managerPage", "/static/**")
+                .antMatchers("/", "/managerPage", "/static/**","/dist/**","/mapp.jsp")
                 .permitAll()
-                //.antMatchers("/managerPage/**","/service/**","/subService/addNewSubService","/user/**").hasRole("MANAGER")
                 .anyRequest().hasRole("MANAGER")
 
                 .and()
@@ -51,7 +47,6 @@ public class ManagerSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .successForwardUrl("/managerPage/login")
                 .loginProcessingUrl("/managerPage/login")
-                //.failureForwardUrl("")
 
                 .and()
                 .logout()

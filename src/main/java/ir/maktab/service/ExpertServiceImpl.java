@@ -203,4 +203,10 @@ public class ExpertServiceImpl implements ExpertService {
         }
         return byEmail.get().getRate();
     }
+
+    @Override
+    public Double getBalance(ExpertDto user) {
+        Optional<Expert> byEmail = expertRepository.findByEmail(user.getEmail());
+        return byEmail.get().getCredit();
+    }
 }

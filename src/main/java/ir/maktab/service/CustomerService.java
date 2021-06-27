@@ -2,7 +2,6 @@ package ir.maktab.service;
 
 import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.OrderDto;
-import ir.maktab.dto.UserDto;
 import ir.maktab.service.exception.DuplicatedEmailAddressException;
 import ir.maktab.service.exception.InvalidPassword;
 import ir.maktab.service.exception.NotFoundCustomerException;
@@ -29,4 +28,6 @@ public interface CustomerService {
     void changePassword(CustomerDto dto);
 
     List<OrderDto> showOrders(CustomerDto dto);
+
+    Double getBalance(CustomerDto user);
 }

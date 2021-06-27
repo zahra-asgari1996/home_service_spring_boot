@@ -26,7 +26,6 @@ public class UserDto {
     private String password;
     private UserSituation userSituation;
     private Date date;
-   @NotNull(message = "checkBox",groups = {LoginValidation.class})
     private UserRole userRole;
     private Double credit;
     private String verificationCode;

@@ -11,6 +11,8 @@ import ir.maktab.service.exception.NotFoundOrderException;
 import ir.maktab.service.exception.NotSubServiceInExpertsListException;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,20 +38,12 @@ public class OfferController {
 
     @GetMapping("/sendOffer/{id}")
     @PreAuthorize("hasRole('EXPERT')")
-    public ModelAndView sendOffer(@PathVariable("id") Integer id, HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        ExpertDto expert = (ExpertDto) session.getAttribute("expert");
-        ExpertDto loginExpert = (ExpertDto) session.getAttribute("loginExpert");
+    public ModelAndView sendOffer(@PathVariable("id") Integer id) {
         OfferDto offerDto = new OfferDto();
         OrderDto dto = new OrderDto();
         dto.setId(id);
         offerDto.setOrders(dto);
-        if (expert != null) {
-            offerDto.setExpert(expert);
-        }
-        if (loginExpert != null) {
-            offerDto.setExpert(loginExpert);
-        }
+        offerDto.setExpert(getUser());
         return new ModelAndView("createNewOfferPage", "newOffer", offerDto);
     }
 
@@ -90,5 +84,19 @@ public class OfferController {
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         System.out.println(lastView);
         return new ModelAndView(lastView, model);
+    }
+
+
+    public ExpertDto getUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userName;
+        if (principal instanceof UserDetails) {
+            userName = ((UserDetails) principal).getUsername();
+        } else {
+            userName = principal.toString();
+        }
+        ExpertDto dto = new ExpertDto();
+        dto.setEmail(userName);
+        return dto;
     }
 }

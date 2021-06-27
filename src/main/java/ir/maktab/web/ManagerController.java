@@ -11,12 +11,14 @@ import ir.maktab.service.SubServiceService;
 import ir.maktab.service.exception.InvalidPassword;
 import ir.maktab.service.exception.NotFoundManagerException;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,11 +41,19 @@ public class ManagerController {
         this.orderService = orderService;
     }
 
+    @GetMapping ("/managerHomePage")
+    @PreAuthorize("hasRole('MANAGER')")
+    public String goToHome(){
+        return "managerHomePage";
+    }
+
 
     @PostMapping("/login")
-    public String getSignIn(@ModelAttribute("manager") @Valid ManagerDto managerDto)
+    @PreAuthorize("hasRole('MANAGER')")
+    public String getSignIn(@ModelAttribute("manager") @Valid ManagerDto managerDto,HttpServletRequest request)
             throws NotFoundManagerException, InvalidPassword {
-        //managerService.loginManager(managerDto);
+        HttpSession session = request.getSession(false);
+        session.setAttribute("manager",managerDto);
         return "managerHomePage";
     }
     @GetMapping(value = "/orderHistoryPage")

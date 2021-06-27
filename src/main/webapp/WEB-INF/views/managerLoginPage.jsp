@@ -59,7 +59,13 @@
         <form:button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</form:button>
     </form:form>
 </main>
-
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
+        </ul>
+    </div>
+</footer>
 </body>
 </html>
 

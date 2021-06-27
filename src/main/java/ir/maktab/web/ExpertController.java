@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.ExpertDto;
 import ir.maktab.dto.SubServiceDto;
 import ir.maktab.service.ExpertService;
@@ -11,6 +12,8 @@ import ir.maktab.service.validation.RegisterValidation;
 import org.springframework.context.MessageSource;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -21,10 +24,10 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
+import java.util.Locale;
 
 @Controller
 @RequestMapping(value = "/expert")
-@SessionAttributes({"expert", "loginExpert"})
 public class ExpertController {
     private final ExpertService expertService;
     private final SubServiceService subServiceService;
@@ -38,16 +41,25 @@ public class ExpertController {
         this.messageSource = messageSource;
     }
 
+    @GetMapping("/expertHomePage")
+    public String goToHomePage(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        session.setAttribute("expert",getUser());
+        return "expertHomePage";
+    }
+    @GetMapping("/balance")
+    @PreAuthorize("hasRole('EXPERT')")
+    public String getBalance(Model model){
+        Double balance = expertService.getBalance(getUser());
+        model.addAttribute("balance",balance);
+        return "customerHomePage";
+    }
+
+
     @GetMapping("/register")
     public ModelAndView goToExpertRegisterPage() {
         return new ModelAndView("expertRegisterPage", "expert", new ExpertDto());
     }
-
-    @GetMapping("/expertHomePage")
-    public String goToHomePage(){
-        return "expertHomePage";
-    }
-
 
     @PostMapping(value = "/register")
     public String registerExpert(@ModelAttribute("expert") @Validated(RegisterValidation.class) ExpertDto expertDto,
@@ -57,10 +69,7 @@ public class ExpertController {
         model.addAttribute("credit",expert.getCredit());
         return "register_success";
     }
-    private String getSiteURL(HttpServletRequest request) {
-        String siteURL = request.getRequestURL().toString();
-        return siteURL.replace(request.getServletPath(), "");
-    }
+
     @GetMapping("/verify")
     public String verifyUser(@Param("code") String code) {
         if (expertService.verify(code)) {
@@ -68,20 +77,6 @@ public class ExpertController {
         } else {
             return "verify_fail";
         }
-    }
-
-
-    @GetMapping("/login")
-    public ModelAndView goToLoginExpertPage() {
-        return new ModelAndView("expertLoginPage", "loginExpert", new ExpertDto());
-    }
-
-    @PostMapping("/login")
-    public String loginExpert(@ModelAttribute("loginExpert") @Validated(LoginValidation.class) ExpertDto dto,Model model)
-            throws NotFoundExpertException, InvalidPassword {
-        ExpertDto expert = expertService.loginExpert(dto);
-        model.addAttribute("credit",expert.getCredit());
-        return "expertHomePage";
     }
 
     @GetMapping("/changePassword")
@@ -92,23 +87,16 @@ public class ExpertController {
     }
 
     @PostMapping("/changePassword")
-    public String changePassword(HttpServletRequest request, @ModelAttribute("changePassword") ExpertDto dto) {
-        HttpSession session = request.getSession(false);
-        ExpertDto expert = (ExpertDto) session.getAttribute("expert");
-        ExpertDto loginExpert = (ExpertDto) session.getAttribute("loginExpert");
-        if (expert != null) {
-            dto.setEmail(expert.getEmail());
-            expertService.changePassword(dto);
-        }
-        if (loginExpert != null) {
-            dto.setEmail(loginExpert.getEmail());
-            expertService.changePassword(dto);
-        }
+    @PreAuthorize("hasRole('EXPERT')")
+    public String changePassword(Model model, @ModelAttribute("changePassword") ExpertDto dto,HttpServletRequest request) {
+        dto.setEmail(getUser().getEmail());
+        expertService.changePassword(dto);
+        model.addAttribute("successAlert",messageSource.getMessage("password.changed",null,new Locale("en_us")));
         return "expertHomePage";
     }
 
-
     @GetMapping("/selectField")
+    @PreAuthorize("hasRole('EXPERT')")
     public String selectField(Model model) {
         model.addAttribute("listOfFields", subServiceService.fetchAllSubServices());
         return "selectFieldForExpert";
@@ -116,54 +104,34 @@ public class ExpertController {
 
 
     @GetMapping("/selectField/{id}")
-    public String selectField(HttpServletRequest request, @PathVariable("id") Integer id)
+    @PreAuthorize("hasRole('EXPERT')")
+    public String selectField(Model model, @PathVariable("id") Integer id,HttpServletRequest request)
             throws NotFoundExpertException,
             NotFoundSubServiceException {
 
-        HttpSession session = request.getSession(false);
-        ExpertDto expert = (ExpertDto) session.getAttribute("expert");
-        ExpertDto loginExpert = (ExpertDto) session.getAttribute("loginExpert");
         SubServiceDto subServiceDto = new SubServiceDto();
         subServiceDto.setId(id);
-        if (expert != null) {
-            expertService.addExpertToSubService(subServiceDto, expert);
-        }
-        if (loginExpert != null) {
-            expertService.addExpertToSubService(subServiceDto, loginExpert);
-        }
+        expertService.addExpertToSubService(subServiceDto, getUser());
+        model.addAttribute("successAlert",messageSource.getMessage("field.select",null,new Locale("en_us")));
         return "expertHomePage";
     }
 
     @GetMapping("/showOrders")
+    @PreAuthorize("hasRole('EXPERT')")
     public String showOrders(HttpServletRequest request, Model model) throws AccessException,
             NotFoundOrderForExpertException {
-        HttpSession session = request.getSession(false);
-        ExpertDto expert = (ExpertDto) session.getAttribute("expert");
-        ExpertDto loginExpert = (ExpertDto) session.getAttribute("loginExpert");
-        if (expert != null) {
-            model.addAttribute("ordersList", orderService.findOrdersBaseOnExpertSubServicesAndSituation(expert));
-        }
-        if (loginExpert != null) {
-            model.addAttribute("ordersList", orderService.findOrdersBaseOnExpertSubServicesAndSituation(loginExpert));
-        }
+        model.addAttribute("ordersList", orderService.findOrdersBaseOnExpertSubServicesAndSituation(getUser()));
         return "showOrdersForExpertToSendOffer";
     }
 
     @GetMapping("/showOrdersToClickEndOfWork")
+    @PreAuthorize("hasRole('EXPERT')")
     public String showSuggestion(Model model, HttpServletRequest request)
             throws NotFoundOrderException {
-
-        HttpSession session = request.getSession(false);
-        ExpertDto expert = (ExpertDto) session.getAttribute("expert");
-        ExpertDto loginExpert = (ExpertDto) session.getAttribute("loginExpert");
-        if (expert != null) {
-            model.addAttribute("orderList", orderService.findByExpert(expert));
-        }
-        if (loginExpert != null) {
-            model.addAttribute("ordersList", orderService.findByExpert(loginExpert));
-        }
+        model.addAttribute("ordersList", orderService.findByExpert(getUser()));
         return "showOrdersForExpertToEndOfWork";
     }
+
     @ExceptionHandler(value = AccessException.class)
     public String accessException(Exception e,Model model){
         model.addAttribute("accessException",e.getLocalizedMessage());
@@ -174,5 +142,23 @@ public class ExpertController {
     public String notFoundOrderForExpertException(Exception e,Model model){
         model.addAttribute("notFoundOrder",e.getLocalizedMessage());
         return "expertHomePage";
+    }
+
+    public ExpertDto getUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userName;
+        if (principal instanceof UserDetails) {
+            userName = ((UserDetails) principal).getUsername();
+        } else {
+            userName = principal.toString();
+        }
+        ExpertDto dto = new ExpertDto();
+        dto.setEmail(userName);
+        return dto;
+    }
+
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        return siteURL.replace(request.getServletPath(), "");
     }
 }

@@ -35,4 +35,6 @@ public interface ExpertService {
     void changePassword(ExpertDto dto);
 
     Double showAvgRate(ExpertDto dto) throws NotFoundExpertException;
+
+    Double getBalance(ExpertDto user);
 }

@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.83.1">
-    <title>Expert Home Page</title>
+    <title>expert_home_page</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sidebars/">
 
@@ -160,20 +160,12 @@
             <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
                id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
                 <strong>
-                    <c:if test="${expert ne null}">
-                        <p>${expert.email}</p>
-                    </c:if>
-
-                    <c:if test="${loginExpert ne null}">
-                        <p>${loginExpert.email}</p>
-
-                    </c:if>
-
+                    <p>${expert.email}</p>
                 </strong>
             </a>
             <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
                 <li><a class="dropdown-item" href="/expert/changePassword">Change Password</a></li>
-                <li><a class="dropdown-item" href="#">credit:${credit}</a></li>
+                <li><a class="dropdown-item"  href="/expert/balance"> balance : ${balance}</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
@@ -188,6 +180,14 @@
         </c:if>
         <c:if test="${notFoundOrder ne null}">
             <p class="d">${notFoundOrder}</p>
+        </c:if>
+    </div>
+    <div>
+        <c:if test="${successAlert ne null}">
+            <blockquote class="blockquote">
+                <p style="  margin: auto;width: 100%;border: 3px solid green;padding: 10px;"
+                   class="mb-0">${successAlert}</p>
+            </blockquote>
         </c:if>
     </div>
 </main>

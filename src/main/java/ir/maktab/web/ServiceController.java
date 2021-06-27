@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @Controller
@@ -36,8 +37,9 @@ public class ServiceController {
     }
 
     @PostMapping(value = "/addNewService")
-    public String addNewService(@ModelAttribute("newService") @Valid ServiceDto serviceDto) throws DuplicatedDataException {
+    public String addNewService(@ModelAttribute("newService") @Valid ServiceDto serviceDto,Model model) throws DuplicatedDataException {
         service.saveNewService(serviceDto);
+        model.addAttribute("successAlert",messageSource.getMessage("add.new.service",null,new Locale("en_us")));
         return "managerHomePage";
     }
 

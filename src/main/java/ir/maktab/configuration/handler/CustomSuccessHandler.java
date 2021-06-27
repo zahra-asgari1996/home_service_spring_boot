@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collection;
 @Component
@@ -17,9 +18,11 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         String redirectUrl = null;
 
+
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
             System.out.println("role " + grantedAuthority.getAuthority());
+
             if (grantedAuthority.getAuthority().equals("ROLE_CUSTOMER")) {
                 redirectUrl = "/customer/customerHomePage";
                 break;
