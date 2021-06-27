@@ -1,13 +1,10 @@
 package ir.maktab.web;
 
 import ir.maktab.configuration.LastViewInterceptor;
+import ir.maktab.dto.AddSubServiceToExpertDto;
 import ir.maktab.dto.FilterOrdersDto;
-import ir.maktab.dto.FilterSpecialUserOrdersDto;
 import ir.maktab.dto.ManagerDto;
-import ir.maktab.service.ManagerService;
-import ir.maktab.service.OrderService;
-import ir.maktab.service.ServiceService;
-import ir.maktab.service.SubServiceService;
+import ir.maktab.service.*;
 import ir.maktab.service.exception.InvalidPassword;
 import ir.maktab.service.exception.NotFoundManagerException;
 import org.springframework.context.MessageSource;
@@ -21,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @Controller
@@ -32,13 +30,15 @@ public class ManagerController {
     private final SubServiceService subServiceService;
     private final ServiceService serviceService;
     private final OrderService orderService;
+    private final ExpertService expertService;
 
-    public ManagerController(ManagerService managerService, MessageSource messageSource, SubServiceService subServiceService, ServiceService serviceService, OrderService orderService) {
+    public ManagerController(ManagerService managerService, MessageSource messageSource, SubServiceService subServiceService, ServiceService serviceService, OrderService orderService, ExpertService expertService) {
         this.managerService = managerService;
         this.messageSource = messageSource;
         this.subServiceService = subServiceService;
         this.serviceService = serviceService;
         this.orderService = orderService;
+        this.expertService = expertService;
     }
 
     @GetMapping ("/managerHomePage")
@@ -70,6 +70,21 @@ public class ManagerController {
         return "filterUsersBaseOnNumOfOrders";
     }
 
+
+    @GetMapping("/addSubServiceToExert")
+    public String addSubServiceToExpert(Model model){
+        model.addAttribute("addSubServiceToExpert",new AddSubServiceToExpertDto());
+        model.addAttribute("expertList",expertService.fetchAllExperts());
+        model.addAttribute("subServiceList",subServiceService.fetchAllSubServices());
+        return "addSubServiceToExpert";
+    }
+    @PostMapping("/addSubServiceToExert")
+    public String addSubServiceToExpert(@ModelAttribute("addSubServiceToExpert")@Valid AddSubServiceToExpertDto dto,Model model){
+        expertService.addSubServiceToExpertList(dto);
+        model.addAttribute("success",
+                messageSource.getMessage("sub.Service.added.to.expert.list",null,new Locale("en_us")));
+        return "managerHomePage";
+    }
 
 
 

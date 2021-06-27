@@ -1,9 +1,6 @@
 package ir.maktab.service;
 
-import ir.maktab.dto.CustomerDto;
-import ir.maktab.dto.ExpertDto;
-import ir.maktab.dto.SelectFieldForExpertDto;
-import ir.maktab.dto.SubServiceDto;
+import ir.maktab.dto.*;
 import ir.maktab.service.exception.DuplicatedEmailAddressException;
 import ir.maktab.service.exception.InvalidPassword;
 import ir.maktab.service.exception.NotFoundExpertException;
@@ -37,4 +34,6 @@ public interface ExpertService {
     Double showAvgRate(ExpertDto dto) throws NotFoundExpertException;
 
     Double getBalance(ExpertDto user);
+
+    void addSubServiceToExpertList(AddSubServiceToExpertDto dto);
 }

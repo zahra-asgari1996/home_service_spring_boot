@@ -163,6 +163,14 @@
                     Add New Sub Service
                 </a>
             </li>
+            <li>
+                <a href="/managerPage/addSubServiceToExert" class="nav-link link-dark">
+                    <svg class="bi me-2" width="16" height="16">
+                        <use xlink:href="#table"/>
+                    </svg>
+                    Add Sub Service To Expert
+                </a>
+            </li>
         </ul>
         <hr>
         <div class="dropdown">
@@ -183,14 +191,6 @@
     </div>
 
     <div class="b-example-divider"></div>
-    <div>
-        <c:if test="${accessException ne null}">
-            <p class="d">${accessException}</p>
-        </c:if>
-        <c:if test="${notFoundOrder ne null}">
-            <p class="d">${notFoundOrder}</p>
-        </c:if>
-    </div>
     <div>
         <c:if test="${successAlert ne null}">
             <blockquote class="blockquote">
