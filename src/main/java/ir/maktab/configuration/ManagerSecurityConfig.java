@@ -36,7 +36,7 @@ public class ManagerSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .csrf().disable().authorizeRequests()
-                .antMatchers("/", "/managerPage", "/static/**","/dist/**","/mapp.jsp")
+                .antMatchers("/", "/managerPage", "/static/**","/dist/**","/mapp.jsp","/managerLogout")
                 .permitAll()
                 .anyRequest().hasRole("MANAGER")
 
@@ -52,6 +52,7 @@ public class ManagerSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/managerLogout")
                 .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
                 .permitAll()
 
                 .and()

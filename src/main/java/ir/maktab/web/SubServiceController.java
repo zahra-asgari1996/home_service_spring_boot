@@ -49,6 +49,7 @@ public class SubServiceController {
     }
 
     @PostMapping("/addNewSubService")
+    @PreAuthorize("hasRole('MANAGER')")
     public String addNewSubService(@ModelAttribute("newSubService") @Valid SubServiceDto dto,Model model) throws DuplicatedDataException,
             NotFoundServiceException {
         subServiceService.saveNewSubService(dto);

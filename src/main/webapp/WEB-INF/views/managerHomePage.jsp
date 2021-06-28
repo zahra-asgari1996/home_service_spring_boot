@@ -181,8 +181,8 @@
                 </strong>
             </a>
             <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                <li><a class="dropdown-item" href="#">he</a></li>
-                <li><a class="dropdown-item" href="#">hel</a></li>
+                <li><a class="dropdown-item" href="/managerLogout">logout</a></li>
+
                 <li>
                     <hr class="dropdown-divider">
                 </li>

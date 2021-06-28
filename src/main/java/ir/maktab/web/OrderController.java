@@ -10,6 +10,7 @@ import ir.maktab.service.exception.NotFoundCustomerException;
 import ir.maktab.service.exception.NotFoundOrderException;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.MessageSource;
+import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,16 +18,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/order")
@@ -35,12 +34,14 @@ public class OrderController {
     private final ServiceService service;
     private final OrderService orderService;
     private final MessageSource messageSource;
+    private final RestTemplate template;
 
 
-    public OrderController(ServiceService service, OrderService orderService, MessageSource messageSource) {
+    public OrderController(ServiceService service, OrderService orderService, MessageSource messageSource, RestTemplate template) {
         this.service = service;
         this.orderService = orderService;
         this.messageSource = messageSource;
+        this.template = template;
     }
 
     @InitBinder
@@ -63,29 +64,30 @@ public class OrderController {
 
     @PostMapping("/createOrder")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public String createNewOrder(@ModelAttribute("newOrder") @Valid OrderDto dto,Model model)
+    public Object createNewOrder(@ModelAttribute("newOrder") @Valid OrderDto dto, Model model, @RequestParam("lat") String lat,
+                                 @RequestParam("lng") String lng)
             throws NotFoundCustomerException {
         CustomerDto customerDto = new CustomerDto();
         customerDto.setEmail(getUser().getEmail());
         dto.setCustomer(customerDto);
-        orderService.saveNewOrder(dto);
-        model.addAttribute("successAlert",messageSource.getMessage("order.created",null,new Locale("en_us")));
+        orderService.saveNewOrder(dto,lat,lng);
+        model.addAttribute("successAlert", messageSource.getMessage("order.created", null, new Locale("en_us")));
         return "customerHomePage";
     }
 
     @GetMapping("/endOfWork/{id}")
     @PreAuthorize("hasRole('EXPERT')")
-    public String endOfWork(@PathVariable("id") Integer id,Model model) throws NotFoundOrderException {
+    public String endOfWork(@PathVariable("id") Integer id, Model model) throws NotFoundOrderException {
         orderService.endOfWork(id);
-        model.addAttribute("successAlert",messageSource.getMessage("end.of.work",null,new Locale("en_us")));
+        model.addAttribute("successAlert", messageSource.getMessage("end.of.work", null, new Locale("en_us")));
         return "expertHomePage";
     }
 
     @GetMapping("/confirmPay/{id}")
     @PreAuthorize("hasRole('EXPERT')")
-    public String ConfirmPay(@PathVariable("id") Integer id,Model model) throws NotFoundOrderException {
+    public String ConfirmPay(@PathVariable("id") Integer id, Model model) throws NotFoundOrderException {
         orderService.confirmPay(id);
-        model.addAttribute("successAlert",messageSource.getMessage("confirm.pay",null,new Locale("en_us")));
+        model.addAttribute("successAlert", messageSource.getMessage("confirm.pay", null, new Locale("en_us")));
         return "expertHomePage";
     }
 
@@ -93,7 +95,7 @@ public class OrderController {
     @PreAuthorize("hasRole('EXPERT')")
     public String startWork(@PathVariable("id") Integer id, Model model) throws NotFoundOrderException {
         orderService.startWork(id);
-        model.addAttribute("successAlert",messageSource.getMessage("start.work",null,new Locale("en_us")));
+        model.addAttribute("successAlert", messageSource.getMessage("start.work", null, new Locale("en_us")));
         return "expertHomePage";
     }
 

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@SessionAttributes("user")
 public class HomeController  implements ErrorController {
     private final CustomerService customerService;
     private final ExpertService expertService;
@@ -32,7 +31,6 @@ public class HomeController  implements ErrorController {
     }
     @RequestMapping("/error")
     public String handleError() {
-//do something like logging
         return "accessDeniedPage";
     }
 
@@ -41,31 +39,28 @@ public class HomeController  implements ErrorController {
         return "home";
     }
 
-
-
-
     @GetMapping(value = "/managerPage")
     public ModelAndView goToLoginManagerPage() {
         //return "managerLoginPage";
         return new ModelAndView("managerLoginPage", "manager", new ManagerDto());
     }
 
-    @GetMapping(value = "/expert")
-    public String goToRegisterExpertPage() {
-        return "expertPage";
-        //return new ModelAndView("expertPage", "expert", new ExpertDto());
-    }
 
-    @GetMapping(value = "/customer")
-    public String goToRegisterCustomerPage() {
-        return "customerPage";
-        //return new ModelAndView("customerPage", "customer", new CustomerDto());
-    }
 
     @GetMapping(value = "/userLogin")
     public ModelAndView loginUsers() {
         logger.info("get method");
         return new ModelAndView("loginUsers", "loginUser", new UserDto());
+    }
+
+    @GetMapping(value = "/managerLogout")
+    public String managerLogout() {
+        return "home";
+    }
+
+    @GetMapping(value = "/userLogout")
+    public String userLogout() {
+        return "home";
     }
 
 //    @GetMapping("/customerHomePage")

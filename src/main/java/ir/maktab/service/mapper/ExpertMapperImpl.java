@@ -30,6 +30,8 @@ public class ExpertMapperImpl implements ExpertMapper {
         expert.setField(dto.getField());
         expert.setImage(dto.getImage());
         expert.setRate(dto.getRate());
+        expert.setVerificationCode(dto.getVerificationCode());
+        expert.setEnabled(dto.isEnabled());
         expert.setServices(dto.getServices().stream().map(i -> serviceMapper.convertToSubService(i)).collect(Collectors.toList()));
         return expert;
     }
@@ -49,6 +51,8 @@ public class ExpertMapperImpl implements ExpertMapper {
         dto.setCredit(expert.getCredit());
         dto.setImage(expert.getImage());
         dto.setRate(expert.getRate());
+        dto.setVerificationCode(expert.getVerificationCode());
+        dto.setEnabled(expert.isEnabled());
         dto.setServices(expert.getServices().stream().map(i -> serviceMapper.covertToSubServiceDto(i)).collect(Collectors.toList()));
         return dto;
     }

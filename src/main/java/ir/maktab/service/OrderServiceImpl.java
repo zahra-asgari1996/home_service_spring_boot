@@ -18,12 +18,11 @@ import ir.maktab.service.mapper.OrderMapper;
 import ir.maktab.service.mapper.SubServiceMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
     private final ExpertRepository expertRepository;
     private final OrderHistoryService orderHistoryService;
     private final MessageSource messageSource;
+    private final RestTemplate template;
 
 
 
@@ -46,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
                             CustomerRepository customerRepository,
                             CustomerMapper customerMapper,
                             ExpertRepository expertRepository,
-                            OrderHistoryService orderHistoryService, MessageSource messageSource) {
+                            OrderHistoryService orderHistoryService, MessageSource messageSource, RestTemplate template) {
         this.repository = repository;
         this.mapper = mapper;
         this.subServiceRepository = subServiceRepository;
@@ -56,10 +56,11 @@ public class OrderServiceImpl implements OrderService {
         this.expertRepository = expertRepository;
         this.orderHistoryService = orderHistoryService;
         this.messageSource = messageSource;
+        this.template = template;
     }
 
     @Override
-    public void saveNewOrder(OrderDto dto) {
+    public void saveNewOrder(OrderDto dto,String lat,String lon) {
         Optional<SubService> subService = subServiceRepository.findByName(dto.getSubService().getName());
         if (subService.isPresent()) {
             dto.setSubService(serviceMapper.covertToSubServiceDto(subService.get()));
@@ -68,12 +69,45 @@ public class OrderServiceImpl implements OrderService {
         if (customer.isPresent()) {
             dto.setCustomer(customerMapper.toCustomerDto(customer.get()));
         }
+        AddressDto address = getAddress(lat, lon);
         dto.setSituation(OrderSituation.Waiting_for_expert_suggestions);
+        dto.setAddress(address);
         Orders save = repository.save(mapper.toOrder(dto));
         OrderHistoryDto orderHistoryDto = new OrderHistoryDto();
         orderHistoryDto.setOrderDto(mapper.toOrderDto(save));
         orderHistoryDto.setOrderSituation(OrderSituation.Waiting_for_expert_suggestions);
         orderHistoryService.save(orderHistoryDto);
+
+    }
+
+    @Override
+    public AddressDto getAddress(String lat, String lon) {
+        String url = "https://map.ir/reverse/no?lat="+lat+"&lon="+lon;
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        headers.set("x-api-key", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjYxOTE4MGM3MWU1NzExODE0NDAzZTk3MTFiZjcxN2ZhODIwMTM5ZjViM2Y3MDNhYjVlOTcxZmRkZDZmMTMwNGYxOTRiMTliMjgwYjcwOTZjIn0.eyJhdWQiOiIxNDYyNiIsImp0aSI6IjYxOTE4MGM3MWU1NzExODE0NDAzZTk3MTFiZjcxN2ZhODIwMTM5ZjViM2Y3MDNhYjVlOTcxZmRkZDZmMTMwNGYxOTRiMTliMjgwYjcwOTZjIiwiaWF0IjoxNjI0NzM1NzI1LCJuYmYiOjE2MjQ3MzU3MjUsImV4cCI6MTYyNzMyNzcyNSwic3ViIjoiIiwic2NvcGVzIjpbImJhc2ljIl19.F1pDeSlV3lhpispxOjHdX0pwY80XYyzEMmqJYdRNbMm30LMMtWiswYSNjpgC11VOPEG9fJiljF355qmX_ZIq93xaOO2Ff1gNw6FUgackl5TW534wwP678L5zs-xFDncESn90lqKa4OCZh-TH_u5bq7BZMSymZVby-hRVQOd8l1K9Z2RYfgUYF5EoUPxMqffIERbPZJcniu0nSVHijegPaAqiO9uScr5kwhaHOh8Oar4HI-dNz2jvVGOaMU3ozafIhRDIp4vZuFp4LW-zpUbaaMQf2wtBDSzAfYqCd5BfU1Zt4ASPwTnnu-NPayKlvlXC36Ce45GCZ_O7JYZqSVq8fw");
+        HttpEntity request = new HttpEntity(headers);
+
+
+        ResponseEntity<AddressDto> response = template.exchange(
+                url,
+                HttpMethod.GET,
+                request,
+                AddressDto.class
+        );
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            System.out.println("Request Successful.");
+            System.out.println(response.getBody());
+            AddressDto body = response.getBody();
+        } else {
+            System.out.println("Request Failed");
+            System.out.println(response.getStatusCode());
+        }
+        return response.getBody();
 
     }
 
@@ -230,6 +264,9 @@ public class OrderServiceImpl implements OrderService {
         }
         return collect;
     }
+
+
+
 
 }
 

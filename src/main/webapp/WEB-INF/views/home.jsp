@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -8,7 +10,8 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="static/mainMenuStyleSheet.css">
+<%--    <link rel="stylesheet" href="<c:url value="/static/mainMenuStyleSheet.css/>">--%>
+    <link rel="stylesheet" href="<c:url value="/static/mainMenuStyleSheet.css"/>" />
 </head>
 <body>
 
@@ -21,7 +24,7 @@
                     <a href="/"><span class="fa fa-home mr-3"></span> Home</a>
                 </li>
                 <li>
-                    <a href="managerPage"><span class="fa fa-user mr-3"></span> Manager Page</a>
+                    <a href="/managerPage"><span class="fa fa-user mr-3"></span> Manager Page</a>
                 </li>
 
                 <li>
@@ -47,12 +50,15 @@
         <p>spring 1400</p>
 
 
+
+
+
     </div>
 </div>
 
-<script src="js/jquery.min.js"></script>
-<script src="js/popper.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/main.js"></script>
+<%--<script src="js/jquery.min.js"></script>--%>
+<%--<script src="js/popper.js"></script>--%>
+<%--<script src="js/bootstrap.min.js"></script>--%>
+<%--<script src="js/main.js"></script>--%>
 </body>
 </html>

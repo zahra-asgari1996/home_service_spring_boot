@@ -7,6 +7,7 @@ import ir.maktab.data.enums.UserSituation;
 import ir.maktab.data.repository.ExpertRepository;
 import ir.maktab.data.repository.SubServiceRepository;
 import ir.maktab.data.repository.UserRepository;
+import ir.maktab.dto.AddSubServiceToExpertDto;
 import ir.maktab.dto.ExpertDto;
 import ir.maktab.dto.SelectFieldForExpertDto;
 import ir.maktab.dto.SubServiceDto;
@@ -208,5 +209,13 @@ public class ExpertServiceImpl implements ExpertService {
     public Double getBalance(ExpertDto user) {
         Optional<Expert> byEmail = expertRepository.findByEmail(user.getEmail());
         return byEmail.get().getCredit();
+    }
+
+    @Override
+    public void addSubServiceToExpertList(AddSubServiceToExpertDto dto) {
+        Optional<Expert> expert = expertRepository.findById(dto.getExpertId());
+        Optional<SubService> subService = subServiceRepository.findById(dto.getSubServiceId());
+        expert.get().getServices().add(subService.get());
+        expertRepository.save(expert.get());
     }
 }

@@ -31,12 +31,14 @@ public class ServiceController {
 
 
     @GetMapping(value = "/addNewService")
+    @PreAuthorize("hasRole('MANAGER')")
     public String addNewService(Model model) {
         model.addAttribute("newService", new ServiceDto());
         return "createNewServicePage";
     }
 
     @PostMapping(value = "/addNewService")
+    @PreAuthorize("hasRole('MANAGER')")
     public String addNewService(@ModelAttribute("newService") @Valid ServiceDto serviceDto,Model model) throws DuplicatedDataException {
         service.saveNewService(serviceDto);
         model.addAttribute("successAlert",messageSource.getMessage("add.new.service",null,new Locale("en_us")));

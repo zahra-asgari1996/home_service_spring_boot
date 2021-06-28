@@ -40,7 +40,8 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.requestMatchers().anyRequest().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/userLogin", "/customer/register", "/expert/register","/loginFailed")
+                .antMatchers("/userLogin", "/customer/register", "/expert/register","/loginFailed","/static/**",
+                        "/customer/verify/**","/expert/verify/**")
                 .permitAll()
                 .anyRequest()
                 .hasAnyRole("CUSTOMER","EXPERT")
@@ -66,6 +67,7 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/userLogout")
                 .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
                 .permitAll()
 
                 .and()

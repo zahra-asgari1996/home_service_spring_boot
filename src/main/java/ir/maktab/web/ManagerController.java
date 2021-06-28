@@ -49,7 +49,7 @@ public class ManagerController {
 
 
     @PostMapping("/login")
-    @PreAuthorize("hasRole('MANAGER')")
+//    @PreAuthorize("hasRole('MANAGER')")
     public String getSignIn(@ModelAttribute("manager") @Valid ManagerDto managerDto,HttpServletRequest request)
             throws NotFoundManagerException, InvalidPassword {
         HttpSession session = request.getSession(false);

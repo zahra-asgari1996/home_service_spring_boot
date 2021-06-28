@@ -5,6 +5,16 @@ public class AddressDto {
     private String street;
     private String alley;
     private String plaque;
+    private  String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public AddressDto setAddress(String address) {
+        this.address = address;
+        return this;
+    }
 
     public String getCity() {
         return city;

@@ -6,7 +6,7 @@ import ir.maktab.service.exception.*;
 import java.util.List;
 
 public interface OrderService {
-    void saveNewOrder(OrderDto dto) throws NotFoundCustomerException;
+    void saveNewOrder(OrderDto dto,String lat,String lng) throws NotFoundCustomerException;
 
     void deleteOrder(OrderDto dto);
 
@@ -33,4 +33,6 @@ public interface OrderService {
     List<String> situations();
 
     List<OrderDto> filterUserOrders(FilterSpecialUserOrdersDto dto) throws NotFoundOrderException;
+
+    AddressDto getAddress(String lat,String lon);
 }

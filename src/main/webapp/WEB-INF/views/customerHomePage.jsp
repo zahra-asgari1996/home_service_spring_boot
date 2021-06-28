@@ -13,7 +13,7 @@
 
 
     <!-- Bootstrap core CSS -->
-    <link href="/static/bootstrap.min.css" rel="stylesheet">
+    <link href="<c:url value="/static/bootstrap.min.css"/>" rel="stylesheet">
 
     <style>
         .bd-placeholder-img {
@@ -35,7 +35,7 @@
     <!-- Custom styles for this template -->
     <link href="/static/sidebars.css" rel="stylesheet">
 </head>
-<body onload="alert()">
+<body >
 
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <symbol id="bootstrap" viewBox="0 0 118 94">
@@ -149,6 +149,7 @@
             <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
                 <li><a class="dropdown-item" href="/customer/changePassword">Change Password</a></li>
                 <li><a class="dropdown-item"  href="/customer/balance"> balance : ${balance}</a></li>
+                <li><a href="/userLogout" class="dropdown-item">log out</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
@@ -169,19 +170,8 @@
 
 
 </main>
-<script src="/static/bootstrap.bundle.min.js"></script>
-<script src="/static/sidebars.js"></script>
-<script>
-    function alert() {
-        if (${error ne null}) {
-            console.log("error")
-            alert(${error})
-        }
-        <c:if test="${successAlert}">
-        alert(${successAlert})
-        </c:if>
-    }
-</script>
+<script src="<c:url value="/static/bootstrap.bundle.min.js"/>"></script>
+<script src="<c:url value="/static/sidebars.js"/>"></script>
 </body>
 </html>
 

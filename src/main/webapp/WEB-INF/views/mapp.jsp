@@ -12,7 +12,13 @@
 </head>
 
 <body>
-<div id="app"></div>
+<form action="/map/address">
+    <div id="app"></div>
+    <input type="hidden" name="lat" id="lat">
+    <input type="hidden" name="lng" id="lng">
+    <input type="submit" name="submit" value="submit">
+</form>
+
 <%--<script type="text/javascript" src="/static/dist/js/jquery-3.2.1.min.js"></script>--%>
 <script type="text/javascript" src="<c:url  value="/static/dist/js/jquery-3.2.1.min.js"/>"></script>
 <%--<script type="text/javascript" src="/static/dist/js/mapp.env.js"></script>--%>

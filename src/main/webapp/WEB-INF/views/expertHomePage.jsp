@@ -166,6 +166,7 @@
             <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
                 <li><a class="dropdown-item" href="/expert/changePassword">Change Password</a></li>
                 <li><a class="dropdown-item"  href="/expert/balance"> balance : ${balance}</a></li>
+                <li><a href="/userLogout" class="dropdown-item">log out</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>

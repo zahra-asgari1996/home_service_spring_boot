@@ -52,7 +52,7 @@ public class ExpertController {
     public String getBalance(Model model){
         Double balance = expertService.getBalance(getUser());
         model.addAttribute("balance",balance);
-        return "customerHomePage";
+        return "expertHomePage";
     }
 
 

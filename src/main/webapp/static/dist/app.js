@@ -1,4 +1,5 @@
-
+var lat;
+var lng;
 $(document).ready(function () {
     var app = new Mapp({
         element: '#app',
@@ -13,6 +14,12 @@ $(document).ready(function () {
     });
     app.addLayers();
     app.map.on('click', function (e) {
+        lat = e.latlng.lat;
+        lng = e.latlng.lng;
+        console.log(lat)
+        console.log(lng)
+        document.getElementById("lat").value=lat;
+        document.getElementById("lng").value=lng;
         var marker = app.addMarker({
             name: 'advanced-marker',
             latlng: {

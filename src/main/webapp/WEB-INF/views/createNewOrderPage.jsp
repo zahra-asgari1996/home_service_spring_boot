@@ -16,6 +16,8 @@
 <%--    <link rel="stylesheet" href="<c:url value="/static/dist/app.css"/>">--%>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>new_order</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
 
@@ -106,7 +108,15 @@
     <div id="app"></div>
     <a href="/mapp">mapp</a>
 </main>
-
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
+            <li><a href="/customer/customerHomePage" class="nav-link px-2 link-secondary">Customer Home Page</a></li>
+            <li><a href="/userLogout" class="nav-link px-2 link-secondary">log out</a></li>
+        </ul>
+    </div>
+</footer>
 
 <script>
     function submitForm() {
@@ -115,14 +125,7 @@
         console.log("error")
     }
 </script>
-<footer class="footer mt-auto py-3 bg-light">
-    <div class="container">
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
-            <li><a href="/customer/customerHomePage" class="nav-link px-2 link-secondary">Customer Home Page</a></li>
-        </ul>
-    </div>
-</footer>
+
 </body>
 </html>
 
