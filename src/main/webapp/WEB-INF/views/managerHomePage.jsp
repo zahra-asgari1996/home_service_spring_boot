@@ -102,7 +102,7 @@
     </symbol>
 </svg>
 
-<main>
+<main id="sideBar">
     <h1 class="visually-hidden">Manager Home Page</h1>
 
     <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">

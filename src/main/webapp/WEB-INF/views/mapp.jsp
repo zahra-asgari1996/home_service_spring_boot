@@ -19,13 +19,9 @@
     <input type="submit" name="submit" value="submit">
 </form>
 
-<%--<script type="text/javascript" src="/static/dist/js/jquery-3.2.1.min.js"></script>--%>
 <script type="text/javascript" src="<c:url  value="/static/dist/js/jquery-3.2.1.min.js"/>"></script>
-<%--<script type="text/javascript" src="/static/dist/js/mapp.env.js"></script>--%>
 <script type="text/javascript" src="<c:url value="/static/dist/js/mapp.env.js" />"></script>
-<%--<script type="text/javascript" src="/static/dist/js/mapp.min.js"></script>--%>
 <script type="text/javascript" src="<c:url value="/static/dist/js/mapp.min.js"/>"></script>
-<%--<script type="text/javascript" src="/dist/app.js"></script>--%>
 <script type="text/javascript" src="<c:url  value="/static/dist/app.js"/>"></script>
 </body>
 </html>

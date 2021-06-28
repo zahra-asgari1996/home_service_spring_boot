@@ -13,6 +13,7 @@ import ir.maktab.service.exception.AccessException;
 import ir.maktab.service.exception.NotFoundOfferForOrder;
 import ir.maktab.service.exception.NotFoundOrderException;
 import ir.maktab.service.exception.NotFoundOrderForExpertException;
+import ir.maktab.service.mapper.AddressMapper;
 import ir.maktab.service.mapper.CustomerMapper;
 import ir.maktab.service.mapper.OrderMapper;
 import ir.maktab.service.mapper.SubServiceMapper;
@@ -37,6 +38,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderHistoryService orderHistoryService;
     private final MessageSource messageSource;
     private final RestTemplate template;
+    private final AddressRepository addressRepository;
+    private final AddressMapper addressMapper;
 
 
 
@@ -46,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
                             CustomerRepository customerRepository,
                             CustomerMapper customerMapper,
                             ExpertRepository expertRepository,
-                            OrderHistoryService orderHistoryService, MessageSource messageSource, RestTemplate template) {
+                            OrderHistoryService orderHistoryService, MessageSource messageSource, RestTemplate template, AddressRepository addressRepository, AddressMapper addressMapper) {
         this.repository = repository;
         this.mapper = mapper;
         this.subServiceRepository = subServiceRepository;
@@ -57,6 +60,8 @@ public class OrderServiceImpl implements OrderService {
         this.orderHistoryService = orderHistoryService;
         this.messageSource = messageSource;
         this.template = template;
+        this.addressRepository = addressRepository;
+        this.addressMapper = addressMapper;
     }
 
     @Override
@@ -70,6 +75,7 @@ public class OrderServiceImpl implements OrderService {
             dto.setCustomer(customerMapper.toCustomerDto(customer.get()));
         }
         AddressDto address = getAddress(lat, lon);
+//        addressRepository.save(addressMapper.toAddress(address));
         dto.setSituation(OrderSituation.Waiting_for_expert_suggestions);
         dto.setAddress(address);
         Orders save = repository.save(mapper.toOrder(dto));
@@ -98,15 +104,6 @@ public class OrderServiceImpl implements OrderService {
                 request,
                 AddressDto.class
         );
-
-        if (response.getStatusCode() == HttpStatus.OK) {
-            System.out.println("Request Successful.");
-            System.out.println(response.getBody());
-            AddressDto body = response.getBody();
-        } else {
-            System.out.println("Request Failed");
-            System.out.println(response.getStatusCode());
-        }
         return response.getBody();
 
     }

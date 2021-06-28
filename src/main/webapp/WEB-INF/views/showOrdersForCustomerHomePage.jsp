@@ -25,7 +25,6 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <td>Id</td>
             <td>Job description</td>
             <td>Proposed price</td>
             <td>Situation</td>
@@ -43,18 +42,17 @@
         <tbody>
         <c:forEach items="${ordersList}" var="list">
             <tr>
-                <td rowspan="4">${list.id}</td>
                 <td rowspan="4">${list.jobDescription}</td>
                 <td rowspan="4">${list.proposedPrice}</td>
                 <td rowspan="4">${list.situation}</td>
                 <td rowspan="4">${list.dateOfWork}</td>
                 <td rowspan="4">${list.dateOfOrderRegistration}</td>
-                <td>City</td>
-                <td>${list.address.city}</td>
-                <td>Id</td>
-                <td>${list.expert.id}</td>
-                <td>Id</td>
-                <td>${list.customer.id}</td>
+                <td>Province</td>
+                <td>${list.address.province}</td>
+                <td>Name</td>
+                <td>${list.expert.name}</td>
+                <td>Name</td>
+                <td>${list.customer.name}</td>
                 <td rowspan="4">
                     <c:if test="${list.situation eq 'FINISHED'}">
                         <a onclick="sendOffer(${list.id});" href="#" id="link">Add a Comment</a>
@@ -80,28 +78,28 @@
                 </td>
             </tr>
             <tr>
-                <td>Street</td>
-                <td>${list.address.street}</td>
-                <td>Name</td>
-                <td>${list.expert.name}</td>
-                <td>Name</td>
-                <td>${list.customer.name}</td>
-            </tr>
-            <tr>
-                <td>Alley</td>
-                <td>${list.address.alley}</td>
+                <td>City</td>
+                <td>${list.address.city}</td>
                 <td>Last Name</td>
                 <td>${list.expert.lastName}</td>
                 <td>Last Name</td>
                 <td>${list.customer.lastName}</td>
             </tr>
             <tr>
-                <td>Plaque</td>
-                <td>${list.address.plaque}</td>
+                <td>Address</td>
+                <td>${list.address.neighbourhood}</td>
                 <td>Email</td>
                 <td>${list.expert.email}</td>
                 <td>Email</td>
                 <td>${list.customer.email}</td>
+            </tr>
+            <tr>
+                <td>Plaque</td>
+                <td>${list.address.plaque}</td>
+                <td>Date Of Register</td>
+                <td>${list.expert.date}</td>
+                <td>Date Of Register</td>
+                <td>${list.customer.date}</td>
             </tr>
 
         </c:forEach>

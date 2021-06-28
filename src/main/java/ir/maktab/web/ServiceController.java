@@ -2,6 +2,7 @@ package ir.maktab.web;
 
 import ir.maktab.configuration.LastViewInterceptor;
 import ir.maktab.dto.ServiceDto;
+import ir.maktab.service.SecurityService;
 import ir.maktab.service.ServiceService;
 import ir.maktab.service.exception.DuplicatedDataException;
 import org.springframework.context.MessageSource;
@@ -22,11 +23,13 @@ import java.util.Map;
 public class ServiceController {
     private final ServiceService service;
     private final MessageSource messageSource;
+    private final SecurityService securityService;
 
 
-    public ServiceController(ServiceService service, MessageSource messageSource) {
+    public ServiceController(ServiceService service, MessageSource messageSource, SecurityService securityService) {
         this.service = service;
         this.messageSource = messageSource;
+        this.securityService = securityService;
     }
 
 
@@ -48,7 +51,8 @@ public class ServiceController {
     @ExceptionHandler({DuplicatedDataException.class})
     public ModelAndView errorHandler(Exception e, HttpServletRequest request) {
         Map<String, Object> model = new HashMap<>();
-        model.put("error", e.getLocalizedMessage());
+        String username = securityService.findLoggedInUsername();
+        model.put("errorAlert", e.getLocalizedMessage());
         model.put("newService", new ServiceDto());
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         return new ModelAndView(lastView, model);

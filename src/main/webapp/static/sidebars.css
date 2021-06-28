@@ -7,14 +7,15 @@ html {
     height: -webkit-fill-available;
 }
 
-main {
-    display: flex;
+#sideBar {
+    display: inline-flex;
     flex-wrap: nowrap;
     height: 100vh;
     height: -webkit-fill-available;
     max-height: 100vh;
     overflow-x: auto;
     overflow-y: hidden;
+    align-items: inherit;
 }
 
 .b-example-divider {
@@ -70,7 +71,7 @@ main {
 }
 
 .btn-toggle-nav a {
-    display: inline-flex;
+    display: flex;
     padding: .1875rem .5rem;
     margin-top: .125rem;
     margin-left: 1.25rem;

@@ -4,21 +4,18 @@ import ir.maktab.configuration.LastViewInterceptor;
 import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.ExpertDto;
 import ir.maktab.dto.ManagerDto;
+import ir.maktab.service.SecurityService;
 import ir.maktab.service.exception.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -28,9 +25,11 @@ import java.util.Objects;
 public class ExceptionControllerAdvise {
     private final static Logger logger= LogManager.getLogger(ExceptionControllerAdvise.class);
     private final MessageSource messageSource;
+    private final SecurityService securityService;
 
-    public ExceptionControllerAdvise(MessageSource messageSource) {
+    public ExceptionControllerAdvise(MessageSource messageSource, SecurityService securityService) {
         this.messageSource = messageSource;
+        this.securityService = securityService;
     }
 
     @ExceptionHandler(value = BindException.class)
@@ -112,17 +111,18 @@ public class ExceptionControllerAdvise {
         Map<String, Object> model = new HashMap<>();
         logger.info(e.getLocalizedMessage());
         model.put("error", e.getLocalizedMessage());
+        String username = securityService.findLoggedInUsername();
         model.put("customer", new CustomerDto());
         model.put("expert",new ExpertDto());
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         return new ModelAndView(lastView, model);
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(value= HttpStatus.NOT_FOUND)
-    public void handleNotFoundError(HttpServletResponse response, Exception ex) {
-        logger.error("URL not found exception: " );
-    }
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(value= HttpStatus.NOT_FOUND)
+//    public void handleNotFoundError(HttpServletResponse response, Exception ex) {
+//        logger.error("URL not found exception: " );
+//    }
 
 
 

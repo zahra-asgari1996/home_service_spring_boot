@@ -31,14 +31,16 @@ public class ManagerController {
     private final ServiceService serviceService;
     private final OrderService orderService;
     private final ExpertService expertService;
+    private final SecurityService securityService;
 
-    public ManagerController(ManagerService managerService, MessageSource messageSource, SubServiceService subServiceService, ServiceService serviceService, OrderService orderService, ExpertService expertService) {
+    public ManagerController(ManagerService managerService, MessageSource messageSource, SubServiceService subServiceService, ServiceService serviceService, OrderService orderService, ExpertService expertService, SecurityService securityService) {
         this.managerService = managerService;
         this.messageSource = messageSource;
         this.subServiceService = subServiceService;
         this.serviceService = serviceService;
         this.orderService = orderService;
         this.expertService = expertService;
+        this.securityService = securityService;
     }
 
     @GetMapping ("/managerHomePage")
@@ -62,6 +64,7 @@ public class ManagerController {
         model.addAttribute("subServiceList",subServiceService.fetchAllSubServices());
         model.addAttribute("serviceList",serviceService.fetchAllServices());
         model.addAttribute("situationList",orderService.situations());
+        String loggedInUsername = securityService.findLoggedInUsername();
         return "filterOrders";
     }
 
@@ -81,7 +84,7 @@ public class ManagerController {
     @PostMapping("/addSubServiceToExert")
     public String addSubServiceToExpert(@ModelAttribute("addSubServiceToExpert")@Valid AddSubServiceToExpertDto dto,Model model){
         expertService.addSubServiceToExpertList(dto);
-        model.addAttribute("success",
+        model.addAttribute("successAlert",
                 messageSource.getMessage("sub.Service.added.to.expert.list",null,new Locale("en_us")));
         return "managerHomePage";
     }

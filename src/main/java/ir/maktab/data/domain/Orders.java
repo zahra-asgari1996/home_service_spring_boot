@@ -32,7 +32,7 @@ public class Orders {
     private List<Offers> offers = new ArrayList<>();
     @ManyToOne
     private Expert expert;
-    @Column
+    @ManyToOne(cascade = CascadeType.ALL)
     private Address address;
 
 
