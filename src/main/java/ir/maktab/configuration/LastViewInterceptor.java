@@ -16,7 +16,7 @@ public class LastViewInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request,
                            HttpServletResponse response,
                            Object handler, ModelAndView modelAndView) throws Exception {
-        if (modelAndView != null&& !Objects.equals(modelAndView.getViewName(), "accessDeniedPage")) {
+        if (modelAndView != null&& !Objects.equals(modelAndView.getViewName(), "alert/accessDeniedPage")) {
             HttpSession session = request.getSession(true);
             session.setAttribute(LAST_VIEW_ATTRIBUTE, modelAndView.getViewName());
         }

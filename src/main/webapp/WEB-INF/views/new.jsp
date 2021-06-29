@@ -6,7 +6,7 @@
 
 <html lang="en">
 <head>
-    <title>new_offer</title>
+    <title>show_order</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
@@ -44,7 +44,7 @@
 <body class="text-center">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <symbol id="bootstrap" viewBox="0 0 118 94">
-        <title>Customer Dashboard</title>
+        <title>Expert Dashboard</title>
         <path fill-rule="evenodd" clip-rule="evenodd"
               d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z"></path>
     </symbol>
@@ -108,13 +108,13 @@
 </svg>
 <div style="text-align: left">
     <main id="sideBar">
-        <h1 class="visually-hidden">Customer Dashboard</h1>
+        <h1 class="visually-hidden">Expert Dashboard</h1>
 
-        <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 250px;">
+        <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
             <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
                 <svg class="bi me-2" width="40" height="32">
                 </svg>
-                <span class="fs-4">Customer Dashboard</span>
+                <span class="fs-4">Expert Dashboard</span>
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
@@ -127,19 +127,36 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/order/createOrder" class="nav-link link-dark">
+                    <a href="/expert/selectField" class="nav-link link-dark">
                         <svg class="bi me-2" width="16" height="16">
                             <use xlink:href="#table"/>
                         </svg>
-                        Create New Order
+                        Choose a Field
                     </a>
                 </li>
                 <li>
-                    <a href="/customer/showOrders" class="nav-link link-dark">
+                    <a href="/expert/showOrders" class="nav-link link-dark">
+                        <svg class="bi me-2" width="16" height="16">
+                            <use xlink:href="#table"/>
+                        </svg>
+                        See Orders to send offer
+                    </a>
+                </li>
+                <li>
+                    <a href="/expert/showOrdersToClickEndOfWork" class="nav-link link-dark">
                         <svg class="bi me-2" width="16" height="16">
                             <use xlink:href="#table"/>
                         </svg>
                         Show Orders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/comment/showRate" class="nav-link link-dark">
+                        <svg class="bi me-2" width="16" height="16">
+                            <use xlink:href="#table"/>
+                        </svg>
+                        Show Rates
                     </a>
                 </li>
             </ul>
@@ -149,45 +166,59 @@
                     <p>${expert.email}</p>
                 </strong>
             </div>
-
         </div>
+
         <div class="b-example-divider"></div>
     </main>
 </div>
 <div style="width: 100%;height: 100%">
     <div style="width: 100% ;height:90%">
         <main class="form-signin">
-            <form:form modelAttribute="newOffer" method="post" action="/offer/createOffer">
-                <h1 class="h3 mb-3 fw-normal">Create New Offer</h1>
-
-                <div class="form-floating">
-                    <form:input type="number" class="form-control" id="floatingInput" path="offerPrice"
-                                name="offerPrice"/>
-                    <form:label for="floatingInput" path="offerPrice">Offer Price</form:label>
-                    <p class="text-danger">${offerPrice}</p>
-                </div>
-                <div class="form-floating">
-                    <form:input type="number" class="form-control" id="floatingInput" path="durationOfWork"
-                                name="durationOfWork"/>
-                    <form:label for="floatingInput" path="durationOfWork">Duration Of Work</form:label>
-                    <p class="text-danger">${durationOfWork}</p>
-                </div>
-                <div class="form-floating">
-                    <form:input type="time" class="form-control" id="floatingPassword" path="startTime"
-                                name="startTime"/>
-                    <form:label for="floatingPassword" path="startTime">Start Time</form:label>
-                    <p class="text-danger">${startTime}</p>
-                </div>
-                <div>
-                    <c:if test="${errorAlert ne null}">
-                        <blockquote class="blockquote">
-                            <p style="  margin: auto;width: 100%;border: 3px solid #be081d;padding: 10px;"
-                               class="mb-0">${errorAlert}</p>
-                        </blockquote>
-                    </c:if>
-                </div>
-                <form:button class="w-100 btn btn-lg btn-primary" type="submit">Create</form:button>
-            </form:form>
+            <form action="/expert/showOrders" method="get" id="serviceForm">
+                <table class="table table-striped">
+                    <tr>
+                        <td>Date Of Work</td>
+                        <td>Situation</td>
+                        <td colspan="2">Sub Service</td>
+                        <td colspan="2">Customer Info</td>
+                        <td colspan="2">Address</td>
+                        <td colspan="2">Send Offer</td>
+                    </tr>
+                    <c:forEach items="${ordersList}" var="list">
+                        <tr>
+                            <td rowspan="4">${list.dateOfWork}</td>
+                            <td rowspan="4">${list.situation}</td>
+                            <td rowspan="2">Name</td>
+                            <td rowspan="2">${list.subService.name}</td>
+                            <td rowspan="2">Name</td>
+                            <td rowspan="2">${list.customer.name}</td>
+                            <td>Province</td>
+                            <td>${list.address.province}</td>
+                            <td rowspan="4">
+                                <c:if test="${list.situation eq 'Waiting_for_expert_suggestions'}">
+                                    <a onclick="sendOffer(${list.id});" href="#" id="link">click</a>
+                                </c:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>City</td>
+                            <td>${list.address.city}</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">Base Price</td>
+                            <td rowspan="2">${list.subService.basePrice}</td>
+                            <td rowspan="2">Last Name</td>
+                            <td rowspan="2">${list.customer.lastName}</td>
+                            <td>Address</td>
+                            <td>${list.address.neighbourhood}</td>
+                        </tr>
+                        <tr>
+                            <td>Plaque</td>
+                            <td>${list.address.plaque}</td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </form>
         </main>
     </div>
     <div style="width: 100%;height: 10%">
@@ -200,6 +231,11 @@
         </footer>
     </div>
 </div>
+<script>
+    function sendOffer(id) {
+        window.location.href = "http://localhost:8080/offer/sendOffer/" + id;
+    }
+</script>
 </body>
 </html>
 

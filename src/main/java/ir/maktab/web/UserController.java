@@ -1,12 +1,12 @@
 package ir.maktab.web;
 
 import ir.maktab.configuration.LastViewInterceptor;
-import ir.maktab.dto.FilterUsersDto;
-import ir.maktab.dto.UserDto;
-import ir.maktab.dto.FilterSpecialUserOrdersDto;
+import ir.maktab.dto.*;
 import ir.maktab.service.OrderService;
 import ir.maktab.service.UserService;
+import ir.maktab.service.exception.NotFoundCustomerException;
 import ir.maktab.service.exception.NotFoundExpertException;
+import ir.maktab.service.exception.NotFoundOrderException;
 import ir.maktab.service.exception.NotFoundUserException;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.MessageSource;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Locale;
 
 @Controller
@@ -61,9 +62,12 @@ public class UserController {
     }
 
     @GetMapping(value = "/searchUser/{id}")
-    public String searchUser(Model model,@PathVariable("id") Integer id) throws  NotFoundUserException {
+    public String searchUser(Model model,@PathVariable("id") Integer id) throws NotFoundUserException, NotFoundOrderException, NotFoundCustomerException {
         UserDto userDto = userService.findById(id);
         FilterSpecialUserOrdersDto dto = new FilterSpecialUserOrdersDto();
+        CustomerDto customerDto=new CustomerDto();
+        customerDto.setEmail(userDto.getEmail());
+        orderService.findByCustomer(customerDto);
         dto.setUserId(userDto.getId());
         dto.setRole(userDto.getUserRole());
         model.addAttribute("filterUserOrders",dto);
@@ -77,5 +81,11 @@ public class UserController {
         model.addAttribute("errorAlert",e.getLocalizedMessage());
         String lastView= (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         return lastView;
+    }
+
+    @ExceptionHandler(value = NotFoundOrderException.class)
+    public String handleNotFoundOrder(Exception e, Model model, HttpServletRequest request){
+        model.addAttribute("errorAlert",e.getLocalizedMessage());
+        return "manager/managerHomePage";
     }
 }
