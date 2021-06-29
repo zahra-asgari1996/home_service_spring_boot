@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
                 repository.findAll(UserSpecification.userHistory(dto))
                         .stream().map(i -> mapper.toUserDto(i)).collect(Collectors.toList());
         if (collect.size()==0){
-            throw new NotFoundUserException(messageSource.getMessage("not.found.user",null,new Locale("fa_ir")));
+            throw new NotFoundUserException(messageSource.getMessage("not.found.user",null,new Locale("en_us")));
         }
         return collect;
     }
@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
     public UserDto confirmUser(Integer id) throws NotFoundExpertException {
         Optional<Users> optionalUser = repository.findById(id);
         if (!optionalUser.isPresent()){
-            throw new NotFoundExpertException(messageSource.getMessage("not.found.expert",null,new Locale("fa_ir")));
+            throw new NotFoundExpertException(messageSource.getMessage("not.found.expert",null,new Locale("en_us")));
         }
         optionalUser.get().setUserSituation(UserSituation.Accepted);
         repository.save(optionalUser.get());
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
     public UserDto findById(Integer id) throws NotFoundUserException {
         Optional<Users> optionalUser = repository.findById(id);
         if (!optionalUser.isPresent()){
-            throw new NotFoundUserException(messageSource.getMessage("not.found.user",null,new Locale("fa_ir")));
+            throw new NotFoundUserException(messageSource.getMessage("not.found.user",null,new Locale("en_us")));
         }
         return mapper.toUserDto(optionalUser.get());
     }

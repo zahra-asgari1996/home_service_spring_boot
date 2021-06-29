@@ -26,7 +26,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public void saveNewService(ServiceDto serviceDto) throws DuplicatedDataException {
         if (serviceRepository.findByName(serviceDto.getName()) != null) {
-            throw new DuplicatedDataException(messageSource.getMessage("duplicated.data",null,new Locale("fa_ir")));
+            throw new DuplicatedDataException(messageSource.getMessage("duplicated.data",null,new Locale("en_us")));
         } else {
             serviceRepository.save(serviceMapper.convertToService(serviceDto));
         }

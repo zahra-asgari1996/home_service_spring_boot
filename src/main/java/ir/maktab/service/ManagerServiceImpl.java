@@ -69,10 +69,10 @@ public class ManagerServiceImpl implements ManagerService {
             if (passwordEncoder.matches(correctManager.getPassword(), dto.getPassword())) {
                 return mapper.toManagerDto(correctManager);
             } else {
-                throw new InvalidPassword(messageSource.getMessage("invalid.password",null,new Locale("fa_ir")));
+                throw new InvalidPassword(messageSource.getMessage("invalid.password",null,new Locale("en_us")));
             }
         } else {
-            throw new NotFoundManagerException(messageSource.getMessage("not.found.manager",null,new Locale("fa_ir")));
+            throw new NotFoundManagerException(messageSource.getMessage("not.found.manager",null,new Locale("en_us")));
         }
     }
 }

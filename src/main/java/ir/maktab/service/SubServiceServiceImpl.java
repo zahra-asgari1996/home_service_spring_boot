@@ -38,10 +38,10 @@ public class SubServiceServiceImpl implements SubServiceService {
     @Override
     public void saveNewSubService(SubServiceDto subServiceDto) throws DuplicatedDataException, NotFoundServiceException {
         if (subServiceRepository.findByName(subServiceDto.getName()).isPresent()) {
-            throw new DuplicatedDataException(messageSource.getMessage("duplicated.data",null,new Locale("fa_ir")));
+            throw new DuplicatedDataException(messageSource.getMessage("duplicated.data",null,new Locale("en_us")));
         }
         if (service.findByName(subServiceDto.getService().getName()) == null) {
-            throw new NotFoundServiceException(messageSource.getMessage("not.found.service",null,new Locale("fa_ir")));
+            throw new NotFoundServiceException(messageSource.getMessage("not.found.service",null,new Locale("en_us")));
         }
         subServiceDto.setService(serviceMapper.convertToServiceDto(service.findByName(subServiceDto.getService().getName())));
         subServiceRepository.save(
@@ -77,9 +77,6 @@ public class SubServiceServiceImpl implements SubServiceService {
     public void deleteExpertFromSubService(SubServiceDto service, ExpertDto expert) {
         service.getExperts().remove(expert);
         subServiceRepository.save(subServiceMapper.convertToSubService(service));
-//        subServiceRepository.
-//                deleteExpertFromSubService(
-//                        subServiceMapper.convertToSubService(service),mapper.toExpert(expert) );
     }
 
     @Override
@@ -87,10 +84,6 @@ public class SubServiceServiceImpl implements SubServiceService {
         service.getExperts().remove(oldExpert);
         service.getExperts().add(newExpert);
         subServiceRepository.save(subServiceMapper.convertToSubService(service));
-//        subServiceRepository.
-//                updateExpertInSubService
-//                        (subServiceMapper.convertToSubService(service),mapper.toExpert(newExpert),mapper.toExpert(oldExpert) );
-
     }
 
     @Override
@@ -99,10 +92,6 @@ public class SubServiceServiceImpl implements SubServiceService {
         service.getExperts().add(expert);
         System.out.println(service.getExperts().size());
         subServiceRepository.save(subServiceMapper.convertToSubService(service));
-//        subServiceRepository.
-//                addExpertToSubService
-//                        (subServiceMapper.convertToSubService(service),mapper.toExpert(expert) );
-
     }
 
     @Override
@@ -111,11 +100,10 @@ public class SubServiceServiceImpl implements SubServiceService {
         if (subService.isPresent()) {
             return subServiceMapper.covertToSubServiceDto(subService.get());
         }
-        throw new NotFoundSubServiceException(messageSource.getMessage("not.found.sub.service",null,new Locale("fa_ir")));
+        throw new NotFoundSubServiceException(messageSource.getMessage("not.found.sub.service",null,new Locale("en_us")));
     }
 
     @Override
-    //ist of dto beferst
     public List<String> getSubServicesByServiceName(String service) {
         return subServiceRepository.findByServiceName(service).stream().map(i -> i.getName()).collect(Collectors.toList());
 

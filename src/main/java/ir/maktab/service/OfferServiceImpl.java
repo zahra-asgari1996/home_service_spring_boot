@@ -54,10 +54,11 @@ public class OfferServiceImpl implements OfferService {
         dto.setExpert(expertDto);
         dto.setOrders(orderDto);
         if (dto.getOfferPrice() < basePrice) {
-            throw new LessOfferPriceException(messageSource.getMessage("less.offer.price", null, new Locale("fa_ir")));
+            throw new LessOfferPriceException(messageSource.getMessage("less.offer.price", null, new Locale("en_us")));
         }
         if (!expertDto.getServices().contains(orderDto.getSubService())) {
-            throw new NotSubServiceInExpertsListException(messageSource.getMessage("not.sub.service.in.expert.list", null, new Locale("fa_ir")));
+            throw new NotSubServiceInExpertsListException(
+                    messageSource.getMessage("not.sub.service.in.expert.list", null, new Locale("en_us")));
         }
         dto.getOrders().setSituation(OrderSituation.Waiting_for_expert_selection);
         OrderDto order = orderService.updateOrder(dto.getOrders());
@@ -104,7 +105,8 @@ public class OfferServiceImpl implements OfferService {
                 .filter(i -> i.getOrders().getId().equals(id)).collect(Collectors.toList());
 
         if (list.size() == 0) {
-            throw new NotFoundOfferForOrder(messageSource.getMessage("not.found.offer.for.order", null, new Locale("fa_ir")));
+            throw new NotFoundOfferForOrder(
+                    messageSource.getMessage("not.found.offer.for.order", null, new Locale("en_us")));
         }
         return list;
     }
@@ -122,7 +124,6 @@ public class OfferServiceImpl implements OfferService {
         orderHistoryService.save(orderHistoryDto);
         orderService.updateOrder(dto);
         updateOffer(mapper.toOfferDto(offer.get()));
-        //repository.save(offer.get());
     }
 
 
@@ -135,7 +136,8 @@ public class OfferServiceImpl implements OfferService {
         Optional<Offers> offer = repository.findByOrders(orderMapper.toOrder(byId));
         Expert expert = offer.get().getExpert();
         if (offer.get().getOfferPrice() > customerDto.getCredit()) {
-            throw new NotEnoughAccountBalance(messageSource.getMessage("not.enough.balance", null, new Locale("fa_ir")));
+            throw new NotEnoughAccountBalance(
+                    messageSource.getMessage("not.enough.balance", null, new Locale("en_us")));
         }
         offer.get().setOfferSituation(OfferSituation.DONE);
         repository.save(offer.get());
@@ -166,22 +168,5 @@ public class OfferServiceImpl implements OfferService {
         expert.setCredit(expert.getCredit() + offer.get().getOfferPrice() * 0.7);
         expertService.updateExpert(expertMapper.toExpertDto(expert));
     }
-
-//    @Override
-//    public List<OfferDto> filterOffers(OfferHistoryDto dto) {
-//        List<Offers> all = repository.findAll(Specification.where(OfferSpecification.filterOffers(dto)));
-//        return all.stream().map(i->mapper.toOfferDto(i)).collect(Collectors.toList());
-//    }
-//
-
-    //return offerPrice.stream().filter(i -> i.getOrders().equals(orderDto)).map(i -> mapper.toOfferDto(i)).collect(Collectors.toList());
-//        Pageable pageable= PageRequest.of(offset,limit,Sort.Direction.ASC,"offerPrice");
-//        Page<Offers> matchedNectarines =
-//                repository.findAll(OffersRepository.findOffersByOrders(orderMapper.toOrder(orderDto)), pageable);
-//        return
-//                matchedNectarines
-//                        .getContent().stream()
-//                        .map(i->mapper.toOfferDto(i)).collect(Collectors.toList());
-
 }
 

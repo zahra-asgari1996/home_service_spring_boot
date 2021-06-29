@@ -75,7 +75,6 @@ public class OrderServiceImpl implements OrderService {
             dto.setCustomer(customerMapper.toCustomerDto(customer.get()));
         }
         AddressDto address = getAddress(lat, lon);
-//        addressRepository.save(addressMapper.toAddress(address));
         dto.setSituation(OrderSituation.Waiting_for_expert_suggestions);
         dto.setAddress(address);
         Orders save = repository.save(mapper.toOrder(dto));
@@ -136,7 +135,8 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setSituation(OrderSituation.Waiting_for_expert_to_come);
 
         } else {
-            throw new NotFoundOfferForOrder(messageSource.getMessage("not.found.offer.for.order",null,new Locale("fa_ir")));
+            throw new NotFoundOfferForOrder(
+                    messageSource.getMessage("not.found.offer.for.order",null,new Locale("en_us")));
         }
     }
 
@@ -145,12 +145,12 @@ public class OrderServiceImpl implements OrderService {
             NotFoundOrderForExpertException {
         Optional<Expert> expert = expertRepository.findByEmail(expertDto.getEmail());
         if (!expert.get().getUserSituation().equals(UserSituation.Accepted)){
-            throw new AccessException(messageSource.getMessage("access.exception",null,new Locale("fa_ir")));
+            throw new AccessException(messageSource.getMessage("access.exception",null,new Locale("en_us")));
         }
         List<Orders> orders = repository.findOrdersBaseOnExpertSubServices(expert.get());
         if (orders.size()==0){
             throw new NotFoundOrderForExpertException(
-                    messageSource.getMessage("not.found.order.for.expert",null,new Locale("fa_ir")));
+                    messageSource.getMessage("not.found.order.for.expert",null,new Locale("en_us")));
         }
         return orders.stream().filter(i -> i.getSituation().equals(OrderSituation.Waiting_for_expert_suggestions))
                 .map(i -> mapper.toOrderDto(i)).collect(Collectors.toList());
@@ -162,7 +162,7 @@ public class OrderServiceImpl implements OrderService {
         if (order.isPresent()) {
             return mapper.toOrderDto(order.get());
         } else {
-            throw new NotFoundOrderException(messageSource.getMessage("not.found.order",null,new Locale("fa_ir")));
+            throw new NotFoundOrderException(messageSource.getMessage("not.found.order",null,new Locale("en_us")));
         }
     }
 
@@ -171,7 +171,7 @@ public class OrderServiceImpl implements OrderService {
         Optional<Expert> expert= expertRepository.findByEmail(dto.getEmail());
         List<Orders> orders = repository.findByExpert(expert.get());
         if (orders.size() == 0) {
-            throw new NotFoundOrderException(messageSource.getMessage("not.found.order",null,new Locale("fa_ir")));
+            throw new NotFoundOrderException(messageSource.getMessage("not.found.order",null,new Locale("en_us")));
         }
         return orders.stream().map(i -> mapper.toOrderDto(i)).collect(Collectors.toList());
     }
@@ -181,7 +181,8 @@ public class OrderServiceImpl implements OrderService {
         Optional<Customer> customerDto = customerRepository.findByEmail(dto.getEmail());
         List<Orders> orders = repository.findByCustomer(customerDto.get());
         if (orders.size() == 0) {
-            throw new NotFoundOrderException(messageSource.getMessage("not.found.order",null,new Locale("fa_ir")));
+            throw new NotFoundOrderException(
+                    messageSource.getMessage("not.found.order",null,new Locale("en_us")));
         }
         return orders.stream().map(i -> mapper.toOrderDto(i)).collect(Collectors.toList());
     }
@@ -190,7 +191,8 @@ public class OrderServiceImpl implements OrderService {
     public void endOfWork(Integer id) throws NotFoundOrderException {
         Optional<Orders> byId = repository.findById(id);
         if (!byId.isPresent()){
-            throw new NotFoundOrderException(messageSource.getMessage("not.found.order",null,new Locale("fa_ir")));
+            throw new NotFoundOrderException(
+                    messageSource.getMessage("not.found.order",null,new Locale("en_us")));
         }
         byId.get().setSituation(OrderSituation.DONE);
         updateOrder(mapper.toOrderDto(byId.get()));
@@ -204,7 +206,8 @@ public class OrderServiceImpl implements OrderService {
     public void confirmPay(Integer id) throws NotFoundOrderException {
         Optional<Orders> byId = repository.findById(id);
         if (!byId.isPresent()){
-            throw new NotFoundOrderException(messageSource.getMessage("not.found.order",null,new Locale("fa_ir")));
+            throw new NotFoundOrderException(
+                    messageSource.getMessage("not.found.order",null,new Locale("en_us")));
         }
         byId.get().setSituation(OrderSituation.FINISHED);
         OrderDto dto = updateOrder(mapper.toOrderDto(byId.get()));
@@ -218,7 +221,8 @@ public class OrderServiceImpl implements OrderService {
     public void startWork(Integer id) throws NotFoundOrderException {
         Optional<Orders> byId = repository.findById(id);
         if (!byId.isPresent()){
-            throw new NotFoundOrderException(messageSource.getMessage("not.found.order",null,new Locale("fa_ir")));
+            throw new NotFoundOrderException(
+                    messageSource.getMessage("not.found.order",null,new Locale("en_us")));
         }
         byId.get().setSituation(OrderSituation.STARTED);
         OrderDto dto = updateOrder(mapper.toOrderDto(byId.get()));
@@ -234,7 +238,8 @@ public class OrderServiceImpl implements OrderService {
 
         List<OrderDto> collect = all.stream().map(i -> mapper.toOrderDto(i)).collect(Collectors.toList());
         if(collect.size()==0){
-            throw new NotFoundOrderException(messageSource.getMessage("not.found.order",null,new Locale("fa_ir")));
+            throw new NotFoundOrderException(
+                    messageSource.getMessage("not.found.order",null,new Locale("en_us")));
         }
         return collect;
     }
@@ -257,7 +262,8 @@ public class OrderServiceImpl implements OrderService {
         List<Orders> all = repository.findAll(Specification.where(UserOrderSpecification.filterOrders(dto)));
         List<OrderDto> collect = all.stream().map(i -> mapper.toOrderDto(i)).collect(Collectors.toList());
         if(collect.size()==0){
-            throw new NotFoundOrderException(messageSource.getMessage("not.found.order",null,new Locale("fa_ir")));
+            throw new NotFoundOrderException(
+                    messageSource.getMessage("not.found.order",null,new Locale("en_us")));
         }
         return collect;
     }

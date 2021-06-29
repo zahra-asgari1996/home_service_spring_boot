@@ -18,15 +18,14 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
     private final CommentsRepository commentsRepository;
     private final CommentMapper commentMapper;
-    private final CustomerService customerService;
     private final ExpertService expertService;
     private final OrderService orderService;
     private final ExpertMapper expertMapper;
 
-    public CommentServiceImpl(CommentsRepository commentsRepository, CommentMapper commentMapper, CustomerService customerService, ExpertService expertService, OrderService orderService, ExpertMapper expertMapper) {
+    public CommentServiceImpl(CommentsRepository commentsRepository, CommentMapper commentMapper,
+                              ExpertService expertService, OrderService orderService, ExpertMapper expertMapper) {
         this.commentsRepository = commentsRepository;
         this.commentMapper = commentMapper;
-        this.customerService = customerService;
         this.expertService = expertService;
         this.orderService = orderService;
         this.expertMapper = expertMapper;

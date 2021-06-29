@@ -59,7 +59,7 @@ public class ExpertServiceImpl implements ExpertService {
         Optional<Expert> optionalExpert = expertRepository.findByEmail(dto.getEmail());
         if (optionalExpert.isPresent()) {
             throw new DuplicatedEmailAddressException(
-                    messageSource.getMessage("duplicated.email.address",null,new Locale("fa_ir")));
+                    messageSource.getMessage("duplicated.email.address",null,new Locale("en_us")));
         }
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
         dto.setPassword(encodedPassword);
@@ -142,7 +142,7 @@ public class ExpertServiceImpl implements ExpertService {
         if (expert.isPresent()) {
             return expertMapper.toExpertDto(expert.get());
         }
-        throw new NotFoundExpertException(messageSource.getMessage("not.found.expert",null,new Locale("fa_ir")));
+        throw new NotFoundExpertException(messageSource.getMessage("not.found.expert",null,new Locale("en_us")));
 
     }
 
@@ -151,17 +151,13 @@ public class ExpertServiceImpl implements ExpertService {
         Optional<SubService> subService = subServiceRepository.findById(service.getId());
         Optional<Expert> expertOptional = expertRepository.findByEmail(expert.getEmail());
         if (!subService.isPresent()){
-            throw new NotFoundSubServiceException(messageSource.getMessage("not.found.sub.service",null,new Locale("fa_ir")));
+            throw new NotFoundSubServiceException(messageSource.getMessage("not.found.sub.service",null,new Locale("en_us")));
         }if (!expertOptional.isPresent()){
-            throw  new NotFoundExpertException(messageSource.getMessage("not.found.expert",null,new Locale("fa_ir")));
+            throw  new NotFoundExpertException(messageSource.getMessage("not.found.expert",null,new Locale("en_us")));
         }
         expertOptional.get().getServices().add(subService.get());
         expertRepository.save(expertOptional.get());
 
-//        System.out.println(service.getExperts().size());
-//        service.getExperts().add(expert);
-//        System.out.println(service.getExperts().size());
-//        subServiceRepository.save(subServiceMapper.convertToSubService(service));
     }
 
     @Override
@@ -178,12 +174,12 @@ public class ExpertServiceImpl implements ExpertService {
         Optional<Expert> expert = expertRepository.findByEmail(dto.getEmail());
         if (expert.isPresent()) {
             if (!expert.get().getPassword().equals(dto.getPassword())) {
-                throw new InvalidPassword(messageSource.getMessage("invalid.password",null,new Locale("fa_ir")));
+                throw new InvalidPassword(messageSource.getMessage("invalid.password",null,new Locale("en_us")));
             } else {
                 return expertMapper.toExpertDto(expert.get());
             }
         } else {
-            throw new NotFoundExpertException(messageSource.getMessage("not.found.expert",null,new Locale("fa_ir")));
+            throw new NotFoundExpertException(messageSource.getMessage("not.found.expert",null,new Locale("en_us")));
         }
     }
 
@@ -200,7 +196,7 @@ public class ExpertServiceImpl implements ExpertService {
     public Double showAvgRate(ExpertDto dto) throws NotFoundExpertException {
         Optional<Expert> byEmail = expertRepository.findByEmail(dto.getEmail());
         if (!byEmail.isPresent()){
-            throw new NotFoundExpertException(messageSource.getMessage("not.found.expert",null,new Locale("fa_ir")));
+            throw new NotFoundExpertException(messageSource.getMessage("not.found.expert",null,new Locale("en_us")));
         }
         return byEmail.get().getRate();
     }

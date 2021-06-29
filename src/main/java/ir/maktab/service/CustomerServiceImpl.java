@@ -51,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<Customer> customer = customerRepository.findByEmail(dto.getEmail());
         if (customer.isPresent()) {
             throw new DuplicatedEmailAddressException(
-                    messageSource.getMessage("duplicated.email.address",null,new Locale("fa_ir")));
+                    messageSource.getMessage("duplicated.email.address",null,new Locale("en_us")));
         }
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
         dto.setPassword(encodedPassword);
@@ -135,7 +135,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer.isPresent()) {
             return customerMapper.toCustomerDto(customer.get());
         }
-        throw new NotFoundCustomerException(messageSource.getMessage("not.found.customer",null,new Locale("fa_ir")));
+        throw new NotFoundCustomerException(messageSource.getMessage("not.found.customer",null,new Locale("en_us")));
     }
 
     @Override
@@ -145,10 +145,10 @@ public class CustomerServiceImpl implements CustomerService {
             if (passwordEncoder.matches(customer.get().getPassword(), dto.getPassword())) {
                 return customerMapper.toCustomerDto(customer.get());
             } else {
-                throw new InvalidPassword(messageSource.getMessage("invalid.password",null,new Locale("fa_ir")));
+                throw new InvalidPassword(messageSource.getMessage("invalid.password",null,new Locale("en_us")));
             }
         } else {
-            throw new NotFoundCustomerException(messageSource.getMessage("not.found.customer",null,new Locale("fa_ir")));
+            throw new NotFoundCustomerException(messageSource.getMessage("not.found.customer",null,new Locale("en_us")));
         }
     }
 
