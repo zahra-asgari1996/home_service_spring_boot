@@ -55,7 +55,7 @@ public class ExceptionControllerAdvise {
     @ExceptionHandler(value = NotEnoughAccountBalance.class)
     public String notEnoughBalanceException(Model model,Exception e){
         logger.info(e.getLocalizedMessage());
-        model.addAttribute("error", e.getLocalizedMessage());
+        model.addAttribute("errorAlert", e.getLocalizedMessage());
         return "customerHomePage";
     }
 
@@ -63,21 +63,21 @@ public class ExceptionControllerAdvise {
     public ModelAndView showOrdersException(Exception e,HttpServletRequest request){
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         logger.info(e.getLocalizedMessage());
-        return new ModelAndView(lastView, "error",e.getLocalizedMessage());
+        return new ModelAndView(lastView, "errorAlert",e.getLocalizedMessage());
     }
 
     @ExceptionHandler(value = NotFoundSubServiceException.class)
     public ModelAndView NotFoundSubServiceException(Exception e,HttpServletRequest request){
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         logger.info(e.getLocalizedMessage());
-        return new ModelAndView(lastView, "error",e.getLocalizedMessage());
+        return new ModelAndView(lastView, "errorAlert",e.getLocalizedMessage());
     }
 
     @ExceptionHandler(value = NotFoundCustomerException.class)
     public ModelAndView loginCustomerException(Exception e,HttpServletRequest request){
         Map<String, Object> model = new HashMap<>();
         logger.info(e.getLocalizedMessage());
-        model.put("error", e.getLocalizedMessage());
+        model.put("errorAlert", e.getLocalizedMessage());
         model.put("loginCustomer", new CustomerDto());
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         return new ModelAndView(lastView, model);
@@ -86,7 +86,7 @@ public class ExceptionControllerAdvise {
     @ExceptionHandler(value = NotFoundExpertException.class)
     public ModelAndView loginExpertException(Exception e,HttpServletRequest request){
         Map<String, Object> model = new HashMap<>();
-        model.put("error", e.getLocalizedMessage());
+        model.put("errorAlert", e.getLocalizedMessage());
         model.put("loginExpert", new CustomerDto());
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         logger.info(e.getLocalizedMessage());
@@ -97,7 +97,7 @@ public class ExceptionControllerAdvise {
     public ModelAndView invalidPass(Exception e,HttpServletRequest request){
         Map<String, Object> model = new HashMap<>();
         logger.info(e.getLocalizedMessage());
-        model.put("error", e.getLocalizedMessage());
+        model.put("errorAlert", e.getLocalizedMessage());
         model.put("loginCustomer", new CustomerDto());
         model.put("loginExpert",new ExpertDto());
         model.put("manager", new ManagerDto());
@@ -110,7 +110,7 @@ public class ExceptionControllerAdvise {
     public ModelAndView registerCustomerException(Exception e,HttpServletRequest request){
         Map<String, Object> model = new HashMap<>();
         logger.info(e.getLocalizedMessage());
-        model.put("error", e.getLocalizedMessage());
+        model.put("errorAlert", e.getLocalizedMessage());
         String username = securityService.findLoggedInUsername();
         model.put("customer", new CustomerDto());
         model.put("expert",new ExpertDto());

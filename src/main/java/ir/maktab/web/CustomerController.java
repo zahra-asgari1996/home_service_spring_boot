@@ -3,13 +3,11 @@ package ir.maktab.web;
 import ir.maktab.dto.CreditCardInfo;
 import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.OrderDto;
-import ir.maktab.dto.UserDto;
 import ir.maktab.service.CustomerService;
 import ir.maktab.service.OfferService;
 import ir.maktab.service.OrderService;
 import ir.maktab.service.exception.*;
 import ir.maktab.service.validation.ChangePasswordValidation;
-import ir.maktab.service.validation.LoginValidation;
 import ir.maktab.service.validation.RegisterValidation;
 import org.springframework.context.MessageSource;
 import org.springframework.data.repository.query.Param;
@@ -51,14 +49,14 @@ public class CustomerController {
     public String goToHomePage(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         session.setAttribute("customer",getUser());
-        return "customerHomePage";
+        return "/customer/customerHomePage";
     }
     @GetMapping("/balance")
     @PreAuthorize("hasRole('CUSTOMER')")
     public String getBalance(Model model){
         Double balance = customerService.getBalance(getUser());
         model.addAttribute("balance",balance);
-        return "customerHomePage";
+        return "/customer/customerHomePage";
     }
 
     @PostMapping("/register")
@@ -67,20 +65,20 @@ public class CustomerController {
             throws DuplicatedEmailAddressException, UnsupportedEncodingException, MessagingException {
         CustomerDto customer = customerService.registerCustomer(customerDto, getSiteURL(request));
         model.addAttribute("credit", customer.getCredit());
-        return "register_success";
+        return "alert/register_success";
     }
 
     @GetMapping("/register")
     public ModelAndView goToRegisterPage() {
-        return new ModelAndView("customerRegisterPage", "customer", new CustomerDto());
+        return new ModelAndView("/customer/customerRegisterPage", "customer", new CustomerDto());
     }
 
     @GetMapping("/verify")
     public String verifyUser(@Param("code") String code) {
         if (customerService.verify(code)) {
-            return "verify_success";
+            return "alert/verify_success";
         } else {
-            return "verify_fail";
+            return "alert/verify_fail";
         }
     }
 
@@ -89,7 +87,7 @@ public class CustomerController {
     @PreAuthorize("hasRole('CUSTOMER')")
     public String changePassword(Model model) {
         model.addAttribute("changePassword", new CustomerDto());
-        return "customerPassChange";
+        return "/customer/customerPassChange";
     }
 
 
@@ -99,7 +97,7 @@ public class CustomerController {
         dto.setEmail(getUser().getEmail());
         customerService.changePassword(dto);
         model.addAttribute("successAlert",messageSource.getMessage("password.changed",null,new Locale("en_us")));
-        return "customerHomePage";
+        return "/customer/customerHomePage";
     }
 
     @GetMapping("/showOrders")
@@ -109,7 +107,7 @@ public class CustomerController {
             NotFoundCustomerException
     {
         model.addAttribute("ordersList", orderService.findByCustomer(getUser()));
-        return "showOrdersForCustomerHomePage";
+        return "customer/showOrdersForCustomerHomePage";
     }
 
 
@@ -121,7 +119,7 @@ public class CustomerController {
             NotFoundOfferForOrder
     {
         model.addAttribute("offersList", offerService.getOrderOffersSortByRateAndPrice(getUser(), id));
-        return "showOffersForCustomerHomePage";
+        return "customer/showOffersForCustomerHomePage";
     }
 
     @GetMapping("/paymentFromAccountCredit/{id}")
@@ -133,7 +131,7 @@ public class CustomerController {
     {
         model.addAttribute("successAlert",messageSource.getMessage("pay.from.account.balance",null,new Locale("en_us")));
         offerService.paymentFromAccountCredit(id, getUser());
-        return "customerHomePage";
+        return "/customer/customerHomePage";
     }
 
     @GetMapping("/onlinePayment/{id}")
@@ -142,7 +140,7 @@ public class CustomerController {
     {
         OrderDto orderDto = orderService.findById(id);
         model.addAttribute("order", orderDto);
-        return new ModelAndView("onlinePaymentPage", "onlinePayment", new CreditCardInfo());
+        return new ModelAndView("customer/onlinePaymentPage", "onlinePayment", new CreditCardInfo());
     }
 
     @PostMapping("/onlinePayment")
@@ -157,15 +155,15 @@ public class CustomerController {
             offerService.onlinePayment(orderDto);
         } else {
             model.addAttribute("error", "Captcha Invalid");
-            return "onlinePaymentPage";
+            return "customer/onlinePaymentPage";
         }
         model.addAttribute("successAlert",messageSource.getMessage("pay.from.credit",null,new Locale("en_us")));
-        return "customerHomePage";
+        return "/customer/customerHomePage";
     }
 
     @ExceptionHandler(value = {NotFoundOrderException.class, NotFoundOfferForOrder.class})
     public String handleNotFoundOrder(Exception e, Model model) {
-        model.addAttribute("error", e.getLocalizedMessage());
+        model.addAttribute("errorAlert", e.getLocalizedMessage());
         return "customerHomePage";
 
     }
@@ -178,10 +176,8 @@ public class CustomerController {
         } else {
             userName = principal.toString();
         }
-//        HttpSession session = request.getSession(false);
         CustomerDto dto = new CustomerDto();
         dto.setEmail(userName);
-//        session.setAttribute("customer",dto);
         return dto;
     }
     private String getSiteURL(HttpServletRequest request) {

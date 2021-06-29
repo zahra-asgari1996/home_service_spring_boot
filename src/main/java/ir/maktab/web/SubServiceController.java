@@ -45,7 +45,7 @@ public class SubServiceController {
     public String addNewSubService(Model model) {
         model.addAttribute("newSubService", new SubServiceDto());
         model.addAttribute("serviceList", service.fetchAllServices());
-        return "createNewSubServicePage";
+        return "/subservice/createNewSubServicePage";
     }
 
     @PostMapping("/addNewSubService")
@@ -54,7 +54,7 @@ public class SubServiceController {
             NotFoundServiceException {
         subServiceService.saveNewSubService(dto);
         model.addAttribute("successAlert",messageSource.getMessage("add.new.sub.service",null,new Locale("en_us")));
-        return "managerHomePage";
+        return "manager/managerHomePage";
 
     }
 
@@ -69,13 +69,13 @@ public class SubServiceController {
         model.addAttribute("subServiceList", subServices);
         model.addAttribute("serviceList", serviceList);
         model.addAttribute("selectedService", service);
-        return "createNewOrderPage";
+        return "order/createNewOrderPage";
     }
 
     @ExceptionHandler({DuplicatedDataException.class, NotFoundServiceException.class})
     public ModelAndView errorHandler(Exception e, HttpServletRequest request) {
         Map<String, Object> model = new HashMap<>();
-        model.put("error", e.getLocalizedMessage());
+        model.put("errorAlert", e.getLocalizedMessage());
         model.put("newOffer", new OfferDto());
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         return new ModelAndView(lastView, model);

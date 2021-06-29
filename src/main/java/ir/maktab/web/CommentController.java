@@ -46,7 +46,7 @@ public class CommentController {
         OrderDto orderDto = new OrderDto();
         orderDto.setId(id);
         commentDto.setOrderDto(orderDto);
-        return new ModelAndView("createNewCommentPage", "comment", commentDto);
+        return new ModelAndView("/comment/createNewCommentPage", "comment", commentDto);
     }
 
 
@@ -57,7 +57,7 @@ public class CommentController {
 
         commentService.saveNewComment(dto);
         model.addAttribute("successAlert",messageSource.getMessage("comment.added",null,new Locale("en_us")));
-        return "customerHomePage";
+        return "/customer/customerHomePage";
     }
 
 
@@ -67,14 +67,14 @@ public class CommentController {
             throws NotFoundExpertException {
         model.addAttribute("commentList", commentService.findByExpert(getUser()));
         model.addAttribute("rate", expertService.showAvgRate(getUser()));
-        return "showExpertRate";
+        return "expert/showExpertRate";
     }
 
 
     @ExceptionHandler({NotFoundOrderException.class, NotFoundExpertException.class})
     public ModelAndView errorHandler(Exception e, HttpServletRequest request) {
         Map<String, Object> model = new HashMap<>();
-        model.put("error", e.getLocalizedMessage());
+        model.put("errorAlert", e.getLocalizedMessage());
         model.put("comment", new LoginCustomerDto());
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         System.out.println(lastView);

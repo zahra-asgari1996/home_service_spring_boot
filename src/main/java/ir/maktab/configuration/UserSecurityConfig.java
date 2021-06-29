@@ -41,7 +41,7 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter {
         http.requestMatchers().anyRequest().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/userLogin", "/customer/register", "/expert/register","/loginFailed","/static/**",
-                        "/customer/verify/**","/expert/verify/**")
+                        "/customer/verify/**","/expert/verify/**","/managerLogout")
                 .permitAll()
                 .anyRequest()
                 .hasAnyRole("CUSTOMER","EXPERT")

@@ -46,7 +46,7 @@ public class ManagerController {
     @GetMapping ("/managerHomePage")
     @PreAuthorize("hasRole('MANAGER')")
     public String goToHome(){
-        return "managerHomePage";
+        return "manager/managerHomePage";
     }
 
 
@@ -56,7 +56,7 @@ public class ManagerController {
             throws NotFoundManagerException, InvalidPassword {
         HttpSession session = request.getSession(false);
         session.setAttribute("manager",managerDto);
-        return "managerHomePage";
+        return "manager/managerHomePage";
     }
     @GetMapping(value = "/orderHistoryPage")
     public String goToSearchInOrdersPage(Model model){
@@ -65,12 +65,12 @@ public class ManagerController {
         model.addAttribute("serviceList",serviceService.fetchAllServices());
         model.addAttribute("situationList",orderService.situations());
         String loggedInUsername = securityService.findLoggedInUsername();
-        return "filterOrders";
+        return "manager/filterOrders";
     }
 
     @GetMapping(value = "/filterUserBaseOnNumOfOrders")
     public String goToFilterPage(){
-        return "filterUsersBaseOnNumOfOrders";
+        return "manager/filterUsersBaseOnNumOfOrders";
     }
 
 
@@ -79,14 +79,14 @@ public class ManagerController {
         model.addAttribute("addSubServiceToExpert",new AddSubServiceToExpertDto());
         model.addAttribute("expertList",expertService.fetchAllExperts());
         model.addAttribute("subServiceList",subServiceService.fetchAllSubServices());
-        return "addSubServiceToExpert";
+        return "manager/addSubServiceToExpert";
     }
     @PostMapping("/addSubServiceToExert")
     public String addSubServiceToExpert(@ModelAttribute("addSubServiceToExpert")@Valid AddSubServiceToExpertDto dto,Model model){
         expertService.addSubServiceToExpertList(dto);
         model.addAttribute("successAlert",
                 messageSource.getMessage("sub.Service.added.to.expert.list",null,new Locale("en_us")));
-        return "managerHomePage";
+        return "manager/managerHomePage";
     }
 
 
@@ -95,7 +95,7 @@ public class ManagerController {
     @ExceptionHandler({NotFoundManagerException.class, InvalidPassword.class})
     public ModelAndView errorHandler(Exception e, HttpServletRequest request) {
         Map<String, Object> model = new HashMap<>();
-        model.put("error", e.getLocalizedMessage());
+        model.put("errorAlert", e.getLocalizedMessage());
         model.put("manager", new ManagerDto());
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         return new ModelAndView(lastView, model);

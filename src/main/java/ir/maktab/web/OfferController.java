@@ -44,7 +44,7 @@ public class OfferController {
         dto.setId(id);
         offerDto.setOrders(dto);
         offerDto.setExpert(getUser());
-        return new ModelAndView("createNewOfferPage", "newOffer", offerDto);
+        return new ModelAndView("/offer/createNewOfferPage", "newOffer", offerDto);
     }
 
 
@@ -61,7 +61,7 @@ public class OfferController {
         dto.setExpert(newOffer.getExpert());
         dto.getOrders().setId(newOffer.getOrders().getId());
         offerService.saveNewOffer(dto);
-        return "expertHomePage";
+        return "expert/expertHomePage";
     }
 
 
@@ -70,7 +70,7 @@ public class OfferController {
     public String changeSituation(@PathVariable("id") Integer id)
             throws NotFoundOrderException {
         offerService.changeSituation(id);
-        return "customerHomePage";
+        return "/customer/customerHomePage";
 
     }
 
@@ -79,7 +79,7 @@ public class OfferController {
             , NotFoundExpertException.class, NotFoundOrderException.class})
     public ModelAndView errorHandler(Exception e, HttpServletRequest request) {
         Map<String, Object> model = new HashMap<>();
-        model.put("error", e.getLocalizedMessage());
+        model.put("errorAlert", e.getLocalizedMessage());
         model.put("newOffer", new OfferDto());
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         System.out.println(lastView);

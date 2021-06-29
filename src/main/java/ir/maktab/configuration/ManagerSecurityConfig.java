@@ -38,7 +38,7 @@ public class ManagerSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .csrf().disable().authorizeRequests()
-                .antMatchers("/", "/managerPage", "/static/**","/dist/**","/mapp.jsp","/managerLogout")
+                .antMatchers("/", "/managerPage", "/static/**","/dist/**","/managerLogout")
                 .permitAll()
                 .anyRequest().hasRole("MANAGER")
 

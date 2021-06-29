@@ -37,7 +37,7 @@ public class ServiceController {
     @PreAuthorize("hasRole('MANAGER')")
     public String addNewService(Model model) {
         model.addAttribute("newService", new ServiceDto());
-        return "createNewServicePage";
+        return "service/createNewServicePage";
     }
 
     @PostMapping(value = "/addNewService")
@@ -45,7 +45,7 @@ public class ServiceController {
     public String addNewService(@ModelAttribute("newService") @Valid ServiceDto serviceDto,Model model) throws DuplicatedDataException {
         service.saveNewService(serviceDto);
         model.addAttribute("successAlert",messageSource.getMessage("add.new.service",null,new Locale("en_us")));
-        return "managerHomePage";
+        return "manager/managerHomePage";
     }
 
     @ExceptionHandler({DuplicatedDataException.class})

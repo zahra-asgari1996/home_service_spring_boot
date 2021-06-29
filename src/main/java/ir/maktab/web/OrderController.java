@@ -10,7 +10,6 @@ import ir.maktab.service.exception.NotFoundCustomerException;
 import ir.maktab.service.exception.NotFoundOrderException;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.MessageSource;
-import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,7 +58,7 @@ public class OrderController {
         HttpSession session = request.getSession();
         session.setAttribute("serviceList", service.fetchAllServices());
         session.setAttribute("newOrder", model.getAttribute("newOrder"));
-        return "createNewOrderPage";
+        return "order/createNewOrderPage";
     }
 
     @PostMapping("/createOrder")
@@ -72,7 +71,7 @@ public class OrderController {
         dto.setCustomer(customerDto);
         orderService.saveNewOrder(dto,lat,lng);
         model.addAttribute("successAlert", messageSource.getMessage("order.created", null, new Locale("en_us")));
-        return "customerHomePage";
+        return "/customer/customerHomePage";
     }
 
     @GetMapping("/endOfWork/{id}")
@@ -80,7 +79,7 @@ public class OrderController {
     public String endOfWork(@PathVariable("id") Integer id, Model model) throws NotFoundOrderException {
         orderService.endOfWork(id);
         model.addAttribute("successAlert", messageSource.getMessage("end.of.work", null, new Locale("en_us")));
-        return "expertHomePage";
+        return "expert/expertHomePage";
     }
 
     @GetMapping("/confirmPay/{id}")
@@ -88,7 +87,7 @@ public class OrderController {
     public String ConfirmPay(@PathVariable("id") Integer id, Model model) throws NotFoundOrderException {
         orderService.confirmPay(id);
         model.addAttribute("successAlert", messageSource.getMessage("confirm.pay", null, new Locale("en_us")));
-        return "expertHomePage";
+        return "expert/expertHomePage";
     }
 
     @GetMapping("/startWork/{id}")
@@ -96,14 +95,14 @@ public class OrderController {
     public String startWork(@PathVariable("id") Integer id, Model model) throws NotFoundOrderException {
         orderService.startWork(id);
         model.addAttribute("successAlert", messageSource.getMessage("start.work", null, new Locale("en_us")));
-        return "expertHomePage";
+        return "expert/expertHomePage";
     }
 
 
     @ExceptionHandler({NotFoundCustomerException.class, NotFoundOrderException.class})
     public ModelAndView errorHandler(Exception e, HttpServletRequest request) {
         Map<String, Object> model = new HashMap<>();
-        model.put("error", e.getLocalizedMessage());
+        model.put("errorAlert", e.getLocalizedMessage());
         model.put("newOffer", new OfferDto());
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         System.out.println(lastView);

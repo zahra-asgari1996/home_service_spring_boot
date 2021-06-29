@@ -1,13 +1,11 @@
 package ir.maktab.web;
 
-import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.ExpertDto;
 import ir.maktab.dto.SubServiceDto;
 import ir.maktab.service.ExpertService;
 import ir.maktab.service.OrderService;
 import ir.maktab.service.SubServiceService;
 import ir.maktab.service.exception.*;
-import ir.maktab.service.validation.LoginValidation;
 import ir.maktab.service.validation.RegisterValidation;
 import org.springframework.context.MessageSource;
 import org.springframework.data.repository.query.Param;
@@ -45,20 +43,20 @@ public class ExpertController {
     public String goToHomePage(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         session.setAttribute("expert",getUser());
-        return "expertHomePage";
+        return "expert/expertHomePage";
     }
     @GetMapping("/balance")
     @PreAuthorize("hasRole('EXPERT')")
     public String getBalance(Model model){
         Double balance = expertService.getBalance(getUser());
         model.addAttribute("balance",balance);
-        return "expertHomePage";
+        return "expert/expertHomePage";
     }
 
 
     @GetMapping("/register")
     public ModelAndView goToExpertRegisterPage() {
-        return new ModelAndView("expertRegisterPage", "expert", new ExpertDto());
+        return new ModelAndView("expert/expertRegisterPage", "expert", new ExpertDto());
     }
 
     @PostMapping(value = "/register")
@@ -67,15 +65,15 @@ public class ExpertController {
             throws DuplicatedEmailAddressException, UnsupportedEncodingException, MessagingException {
         ExpertDto expert = expertService.registerExpert(expertDto,getSiteURL(request));
         model.addAttribute("credit",expert.getCredit());
-        return "register_success";
+        return "alert/register_success";
     }
 
     @GetMapping("/verify")
     public String verifyUser(@Param("code") String code) {
         if (expertService.verify(code)) {
-            return "verify_success";
+            return "alert/verify_success";
         } else {
-            return "verify_fail";
+            return "alert/verify_fail";
         }
     }
 
@@ -83,7 +81,7 @@ public class ExpertController {
     @PreAuthorize("hasRole('EXPERT')")
     public String changePassword(Model model) {
         model.addAttribute("changePassword", new ExpertDto());
-        return "expertPassChange";
+        return "expert/expertPassChange";
     }
 
     @PostMapping("/changePassword")
@@ -92,14 +90,14 @@ public class ExpertController {
         dto.setEmail(getUser().getEmail());
         expertService.changePassword(dto);
         model.addAttribute("successAlert",messageSource.getMessage("password.changed",null,new Locale("en_us")));
-        return "expertHomePage";
+        return "expert/expertHomePage";
     }
 
     @GetMapping("/selectField")
     @PreAuthorize("hasRole('EXPERT')")
     public String selectField(Model model) {
         model.addAttribute("listOfFields", subServiceService.fetchAllSubServices());
-        return "selectFieldForExpert";
+        return "expert/selectFieldForExpert";
     }
 
 
@@ -113,7 +111,7 @@ public class ExpertController {
         subServiceDto.setId(id);
         expertService.addExpertToSubService(subServiceDto, getUser());
         model.addAttribute("successAlert",messageSource.getMessage("field.select",null,new Locale("en_us")));
-        return "expertHomePage";
+        return "expert/expertHomePage";
     }
 
     @GetMapping("/showOrders")
@@ -121,7 +119,7 @@ public class ExpertController {
     public String showOrders(HttpServletRequest request, Model model) throws AccessException,
             NotFoundOrderForExpertException {
         model.addAttribute("ordersList", orderService.findOrdersBaseOnExpertSubServicesAndSituation(getUser()));
-        return "showOrdersForExpertToSendOffer";
+        return "expert/showOrdersForExpertToSendOffer";
     }
 
     @GetMapping("/showOrdersToClickEndOfWork")
@@ -129,7 +127,7 @@ public class ExpertController {
     public String showSuggestion(Model model, HttpServletRequest request)
             throws NotFoundOrderException {
         model.addAttribute("ordersList", orderService.findByExpert(getUser()));
-        return "showOrdersForExpertToEndOfWork";
+        return "expert/showOrdersForExpertToEndOfWork";
     }
 
     @ExceptionHandler(value = AccessException.class)
@@ -140,7 +138,7 @@ public class ExpertController {
 
     @ExceptionHandler(value = {NotFoundOrderForExpertException.class})
     public String notFoundOrderForExpertException(Exception e,Model model){
-        model.addAttribute("notFoundOrder",e.getLocalizedMessage());
+        model.addAttribute("errorAlert",e.getLocalizedMessage());
         return "expertHomePage";
     }
 

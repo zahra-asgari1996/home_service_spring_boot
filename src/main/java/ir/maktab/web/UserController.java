@@ -42,14 +42,14 @@ public class UserController {
 
     @PostMapping(value = "/searchUser")
     public ModelAndView searchUsers(@ModelAttribute("users") FilterUsersDto dto) {
-        return new ModelAndView("filterUsers", "usersList", userService.filterUsers(dto));
+        return new ModelAndView("manager/filterUsers", "usersList", userService.filterUsers(dto));
 
     }
 
     @GetMapping(value = "/searchUser")
     public String searchUsers(Model model) {
         model.addAttribute("users", new FilterUsersDto());
-        return "filterUsers";
+        return "manager/filterUsers";
     }
 
     @GetMapping(value = "/confirmUser/{id}")
@@ -57,7 +57,7 @@ public class UserController {
         UserDto confirmUser = userService.confirmUser(id);
         model.addAttribute("confirmUser",confirmUser);
         model.addAttribute("successAlert",messageSource.getMessage("confirm.user",null,new Locale("en_us")));
-        return "managerHomePage";
+        return "manager/managerHomePage";
     }
 
     @GetMapping(value = "/searchUser/{id}")
@@ -68,13 +68,13 @@ public class UserController {
         dto.setRole(userDto.getUserRole());
         model.addAttribute("filterUserOrders",dto);
         model.addAttribute("situationList",orderService.situations());
-        return "filterSpecialUserOrders";
+        return "manager/filterSpecialUserOrders";
     }
 
 
     @ExceptionHandler(value = NotFoundExpertException.class)
     public String handleException(Exception e, Model model, HttpServletRequest request){
-        model.addAttribute("error",e.getLocalizedMessage());
+        model.addAttribute("errorAlert",e.getLocalizedMessage());
         String lastView= (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         return lastView;
     }
