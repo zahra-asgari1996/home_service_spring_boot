@@ -56,7 +56,7 @@ public class ExceptionControllerAdvise {
     public String notEnoughBalanceException(Model model,Exception e){
         logger.info(e.getLocalizedMessage());
         model.addAttribute("errorAlert", e.getLocalizedMessage());
-        return "customerHomePage";
+        return "customer/customerHomePage";
     }
 
     @ExceptionHandler(value = NotFoundOrderException.class)
@@ -117,12 +117,6 @@ public class ExceptionControllerAdvise {
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         return new ModelAndView(lastView, model);
     }
-
-//    @ExceptionHandler(Exception.class)
-//    @ResponseStatus(value= HttpStatus.NOT_FOUND)
-//    public void handleNotFoundError(HttpServletResponse response, Exception ex) {
-//        logger.error("URL not found exception: " );
-//    }
 
 
 

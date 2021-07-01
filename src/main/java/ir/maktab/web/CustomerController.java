@@ -164,7 +164,7 @@ public class CustomerController {
     @ExceptionHandler(value = {NotFoundOrderException.class, NotFoundOfferForOrder.class})
     public String handleNotFoundOrder(Exception e, Model model) {
         model.addAttribute("errorAlert", e.getLocalizedMessage());
-        return "customerHomePage";
+        return "customer/customerHomePage";
 
     }
 

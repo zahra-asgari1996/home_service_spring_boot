@@ -73,14 +73,5 @@ public class ManagerRestController {
     }
 
 
-//    @ExceptionHandler(value = {NotFoundOrderException.class,NotFoundUserException.class})
-//    public ResponseEntity <?> exceptionHAndler(Exception e){
-//        List<String> exceptions = new ArrayList<>();
-//        exceptions.add(e.getMessage());
-//        ApiErrorDto dto = new ApiErrorDto(HttpStatus.INTERNAL_SERVER_ERROR,e.getClass().getName(),exceptions);
-//        return new ResponseEntity<>(dto,dto.getStatus());
-//
-//    }
-
 
 }
