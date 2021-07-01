@@ -6,7 +6,7 @@ import ir.maktab.service.exception.*;
 import java.util.List;
 
 public interface OrderService {
-    void saveNewOrder(OrderDto dto,String lat,String lng) throws NotFoundCustomerException;
+    void saveNewOrder(OrderDto dto,String lat,String lng) throws NotFoundCustomerException, NotFoundExpertForSubServiceException;
 
     void deleteOrder(OrderDto dto);
 

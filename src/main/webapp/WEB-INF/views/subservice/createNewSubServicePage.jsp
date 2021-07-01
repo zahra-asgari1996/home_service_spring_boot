@@ -214,13 +214,13 @@
                 </div>
 
                 <form:select path="service.name">
-                    <form:option value="None">Select</form:option>
+                    <form:option value="None">----Select Service Name----</form:option>
                     <c:forEach items="${serviceList}" var="list">
                         <form:option value="${list.name}" label="name">${list.name}</form:option>
                     </c:forEach>
                 </form:select>
 
-                <div>
+                <div style="padding-bottom: 20px">
                     <c:if test="${errorAlert ne null}">
                         <blockquote class="blockquote">
                             <p style="  margin: auto;width: 100%;border: 3px solid #be081d;padding: 10px;"

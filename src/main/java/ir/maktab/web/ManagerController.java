@@ -5,6 +5,7 @@ import ir.maktab.dto.AddSubServiceToExpertDto;
 import ir.maktab.dto.FilterOrdersDto;
 import ir.maktab.dto.ManagerDto;
 import ir.maktab.service.*;
+import ir.maktab.service.exception.DuplicatedSubServiceException;
 import ir.maktab.service.exception.InvalidPassword;
 import ir.maktab.service.exception.NotFoundManagerException;
 import org.springframework.context.MessageSource;
@@ -82,7 +83,7 @@ public class ManagerController {
         return "manager/addSubServiceToExpert";
     }
     @PostMapping("/addSubServiceToExert")
-    public String addSubServiceToExpert(@ModelAttribute("addSubServiceToExpert")@Valid AddSubServiceToExpertDto dto,Model model){
+    public String addSubServiceToExpert(@ModelAttribute("addSubServiceToExpert")@Valid AddSubServiceToExpertDto dto,Model model) throws DuplicatedSubServiceException {
         expertService.addSubServiceToExpertList(dto);
         model.addAttribute("successAlert",
                 messageSource.getMessage("sub.Service.added.to.expert.list",null,new Locale("en_us")));
@@ -99,5 +100,12 @@ public class ManagerController {
         model.put("manager", new ManagerDto());
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         return new ModelAndView(lastView, model);
+    }
+
+    @ExceptionHandler(DuplicatedSubServiceException.class)
+    public ModelAndView duplicatedSubServiceException(Exception e) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("errorAlert", e.getLocalizedMessage());
+        return new ModelAndView("manager/managerHomePage", model);
     }
 }

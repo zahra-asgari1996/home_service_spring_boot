@@ -159,6 +159,15 @@
                         Show Rates
                     </a>
                 </li>
+
+                <li>
+                    <a href="/userLogout" class="nav-link link-dark">
+                        <svg class="bi me-2" width="16" height="16">
+                            <use xlink:href="#table"/>
+                        </svg>
+                        Logout
+                    </a>
+                </li>
             </ul>
             <hr>
             <div class="dropdown">
@@ -198,15 +207,15 @@
             </form:form>
         </main>
     </div>
-    <div style="width: 100%;height: 10%">
-        <footer class="footer mt-auto py-3 bg-light">
-            <div class="container">
-                <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="/userLogout" class="nav-link px-2 link-secondary">Logout</a></li>
-                </ul>
-            </div>
-        </footer>
-    </div>
+<%--    <div style="width: 100%;height: 10%">--%>
+<%--        <footer class="footer mt-auto py-3 bg-light">--%>
+<%--            <div class="container">--%>
+<%--                <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">--%>
+<%--                    <li><a href="/userLogout" class="nav-link px-2 link-secondary">Logout</a></li>--%>
+<%--                </ul>--%>
+<%--            </div>--%>
+<%--        </footer>--%>
+<%--    </div>--%>
 </div>
 <script>
     function selectField(id) {

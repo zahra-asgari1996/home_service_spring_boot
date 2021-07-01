@@ -9,6 +9,7 @@ import ir.maktab.service.CommentService;
 import ir.maktab.service.ExpertService;
 import ir.maktab.service.exception.NotFoundExpertException;
 import ir.maktab.service.exception.NotFoundOrderException;
+import ir.maktab.service.exception.NotFoundRateForThisExpert;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -64,7 +65,7 @@ public class CommentController {
     @GetMapping("/showRate")
     @PreAuthorize("hasRole('EXPERT')")
     public String showRate( Model model)
-            throws NotFoundExpertException {
+            throws NotFoundExpertException, NotFoundRateForThisExpert {
         model.addAttribute("commentList", commentService.findByExpert(getUser()));
         model.addAttribute("rate", expertService.showAvgRate(getUser()));
         return "expert/showExpertRate";
@@ -79,6 +80,12 @@ public class CommentController {
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         System.out.println(lastView);
         return new ModelAndView(lastView, model);
+    }
+    @ExceptionHandler(NotFoundRateForThisExpert.class)
+    public ModelAndView notFoundRate(Exception e) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("errorAlert", e.getLocalizedMessage());
+        return new ModelAndView("expert/expertHomePage", model);
     }
 
     public ExpertDto getUser() {

@@ -9,10 +9,7 @@ import ir.maktab.data.enums.OrderSituation;
 import ir.maktab.data.enums.UserSituation;
 import ir.maktab.data.repository.*;
 import ir.maktab.dto.*;
-import ir.maktab.service.exception.AccessException;
-import ir.maktab.service.exception.NotFoundOfferForOrder;
-import ir.maktab.service.exception.NotFoundOrderException;
-import ir.maktab.service.exception.NotFoundOrderForExpertException;
+import ir.maktab.service.exception.*;
 import ir.maktab.service.mapper.AddressMapper;
 import ir.maktab.service.mapper.CustomerMapper;
 import ir.maktab.service.mapper.OrderMapper;
@@ -65,10 +62,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void saveNewOrder(OrderDto dto,String lat,String lon) {
+    public void saveNewOrder(OrderDto dto,String lat,String lon) throws NotFoundExpertForSubServiceException {
         Optional<SubService> subService = subServiceRepository.findByName(dto.getSubService().getName());
         if (subService.isPresent()) {
             dto.setSubService(serviceMapper.covertToSubServiceDto(subService.get()));
+            if (subService.get().getExperts().size()==0){
+                throw new NotFoundExpertForSubServiceException(
+                        messageSource.getMessage("not.found.expert.for.sub.service",null,new Locale("en_us")));
+            }
         }
         Optional<Customer> customer = customerRepository.findByEmail(dto.getCustomer().getEmail());
         if (customer.isPresent()) {

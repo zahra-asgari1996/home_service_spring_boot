@@ -22,7 +22,9 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/expert")
@@ -105,7 +107,7 @@ public class ExpertController {
     @PreAuthorize("hasRole('EXPERT')")
     public String selectField(Model model, @PathVariable("id") Integer id,HttpServletRequest request)
             throws NotFoundExpertException,
-            NotFoundSubServiceException {
+            NotFoundSubServiceException, DuplicatedSubServiceException {
 
         SubServiceDto subServiceDto = new SubServiceDto();
         subServiceDto.setId(id);
@@ -133,13 +135,20 @@ public class ExpertController {
     @ExceptionHandler(value = AccessException.class)
     public String accessException(Exception e,Model model){
         model.addAttribute("accessException",e.getLocalizedMessage());
-        return "expertHomePage";
+        return "expert/expertHomePage";
     }
 
-    @ExceptionHandler(value = {NotFoundOrderForExpertException.class})
+    @ExceptionHandler(value = {NotFoundOrderForExpertException.class,NotFoundOrderException.class})
     public String notFoundOrderForExpertException(Exception e,Model model){
         model.addAttribute("errorAlert",e.getLocalizedMessage());
-        return "expertHomePage";
+        return "expert/expertHomePage";
+    }
+
+    @ExceptionHandler(DuplicatedSubServiceException.class)
+    public ModelAndView duplicatedSubServiceException(Exception e) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("errorAlert", e.getLocalizedMessage());
+        return new ModelAndView("expert/expertHomePage", model);
     }
 
     public ExpertDto getUser() {

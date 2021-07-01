@@ -7,6 +7,7 @@ import ir.maktab.dto.OrderDto;
 import ir.maktab.service.OrderService;
 import ir.maktab.service.ServiceService;
 import ir.maktab.service.exception.NotFoundCustomerException;
+import ir.maktab.service.exception.NotFoundExpertForSubServiceException;
 import ir.maktab.service.exception.NotFoundOrderException;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.MessageSource;
@@ -65,7 +66,7 @@ public class OrderController {
     @PreAuthorize("hasRole('CUSTOMER')")
     public Object createNewOrder(@ModelAttribute("newOrder") @Valid OrderDto dto, Model model, @RequestParam("lat") String lat,
                                  @RequestParam("lng") String lng)
-            throws NotFoundCustomerException {
+            throws NotFoundCustomerException, NotFoundExpertForSubServiceException {
         CustomerDto customerDto = new CustomerDto();
         customerDto.setEmail(getUser().getEmail());
         dto.setCustomer(customerDto);
@@ -107,6 +108,13 @@ public class OrderController {
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         System.out.println(lastView);
         return new ModelAndView(lastView, model);
+    }
+
+    @ExceptionHandler(NotFoundExpertForSubServiceException.class)
+    public ModelAndView notFoundExpertForSubService(Exception e) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("errorAlert", e.getLocalizedMessage());
+        return new ModelAndView("customer/customerHomePage", model);
     }
 
     public CustomerDto getUser() {

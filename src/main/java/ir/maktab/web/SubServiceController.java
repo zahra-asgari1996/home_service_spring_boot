@@ -9,19 +9,19 @@ import ir.maktab.service.ServiceService;
 import ir.maktab.service.SubServiceService;
 import ir.maktab.service.exception.DuplicatedDataException;
 import ir.maktab.service.exception.NotFoundServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("subService")
@@ -29,6 +29,8 @@ public class SubServiceController {
     private final SubServiceService subServiceService;
     private final ServiceService service;
     private final MessageSource messageSource;
+    private final static Logger logger= LogManager.getLogger(SubServiceController.class);
+
 
     public SubServiceController(SubServiceService subServiceService, ServiceService service, MessageSource messageSource) {
         this.subServiceService = subServiceService;
@@ -70,6 +72,25 @@ public class SubServiceController {
         model.addAttribute("serviceList", serviceList);
         model.addAttribute("selectedService", service);
         return "order/createNewOrderPage";
+    }
+
+    @ExceptionHandler(value = BindException.class)
+    public ModelAndView validationHandler(BindException ex,HttpServletRequest request,Model object) {
+        Map<String, Object> model = ex.getBindingResult().getModel();
+        String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
+        ex.getFieldErrors().forEach(
+                error -> model.put(error.getField(),
+                        messageSource.getMessage(Objects.requireNonNull(error.getDefaultMessage()),
+                                null, new Locale("en_us")))
+        );
+        System.out.println("");
+        ex.getFieldErrors().forEach(
+                error -> logger.info(
+                        messageSource.getMessage(Objects.requireNonNull(error.getDefaultMessage()),
+                                null, new Locale("en_us")))
+        );
+        object.addAttribute("serviceList", service.fetchAllServices());
+        return new ModelAndView(lastView,model);
     }
 
     @ExceptionHandler({DuplicatedDataException.class, NotFoundServiceException.class})

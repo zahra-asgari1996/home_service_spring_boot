@@ -59,7 +59,7 @@ public class ManagerSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/accessDeniedPage.jsp");
+                .accessDeniedPage("/alert/accessDeniedPage.jsp");
 
 
     }

@@ -1,10 +1,7 @@
 package ir.maktab.service;
 
 import ir.maktab.dto.*;
-import ir.maktab.service.exception.DuplicatedEmailAddressException;
-import ir.maktab.service.exception.InvalidPassword;
-import ir.maktab.service.exception.NotFoundExpertException;
-import ir.maktab.service.exception.NotFoundSubServiceException;
+import ir.maktab.service.exception.*;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -23,11 +20,8 @@ public interface ExpertService {
 
     ExpertDto findByEmail(String email) throws NotFoundExpertException;
 
-     void addExpertToSubService(SubServiceDto service, ExpertDto expert) throws NotFoundSubServiceException, NotFoundExpertException;
+     void addExpertToSubService(SubServiceDto service, ExpertDto expert) throws NotFoundSubServiceException, NotFoundExpertException, DuplicatedSubServiceException;
 
-     void addExpertToSubService(SelectFieldForExpertDto dto);
-
-    ExpertDto loginExpert(ExpertDto dto) throws NotFoundExpertException, InvalidPassword;
 
     void changePassword(ExpertDto dto);
 
@@ -35,5 +29,5 @@ public interface ExpertService {
 
     Double getBalance(ExpertDto user);
 
-    void addSubServiceToExpertList(AddSubServiceToExpertDto dto);
+    void addSubServiceToExpertList(AddSubServiceToExpertDto dto) throws DuplicatedSubServiceException;
 }

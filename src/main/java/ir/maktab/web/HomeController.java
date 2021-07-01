@@ -58,7 +58,7 @@ public class HomeController  implements ErrorController {
 
     @GetMapping("/loginFailed")
     public ModelAndView errorHandler(Model model){
-        model.addAttribute("error","your information is not correct");
+        model.addAttribute("errorAlert","your information is not correct");
         logger.warn("your information is not correct");
         return new ModelAndView("loginUsers", "loginUser", new UserDto());
     }

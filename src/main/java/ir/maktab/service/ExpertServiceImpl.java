@@ -11,10 +11,7 @@ import ir.maktab.dto.AddSubServiceToExpertDto;
 import ir.maktab.dto.ExpertDto;
 import ir.maktab.dto.SelectFieldForExpertDto;
 import ir.maktab.dto.SubServiceDto;
-import ir.maktab.service.exception.DuplicatedEmailAddressException;
-import ir.maktab.service.exception.InvalidPassword;
-import ir.maktab.service.exception.NotFoundExpertException;
-import ir.maktab.service.exception.NotFoundSubServiceException;
+import ir.maktab.service.exception.*;
 import ir.maktab.service.mapper.ExpertMapper;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.context.MessageSource;
@@ -67,6 +64,7 @@ public class ExpertServiceImpl implements ExpertService {
         String randomCode = RandomString.make(64);
         dto.setVerificationCode(randomCode);
         dto.setEnabled(false);
+        dto.setUserSituation(UserSituation.Pending_approval);
 
         expertRepository.save(expertMapper.toExpert(dto));
         sendVerificationEmail(dto, siteURL);
@@ -147,7 +145,7 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     @Override
-    public void addExpertToSubService(SubServiceDto service, ExpertDto expert) throws NotFoundSubServiceException, NotFoundExpertException {
+    public void addExpertToSubService(SubServiceDto service, ExpertDto expert) throws NotFoundSubServiceException, NotFoundExpertException, DuplicatedSubServiceException {
         Optional<SubService> subService = subServiceRepository.findById(service.getId());
         Optional<Expert> expertOptional = expertRepository.findByEmail(expert.getEmail());
         if (!subService.isPresent()){
@@ -155,32 +153,12 @@ public class ExpertServiceImpl implements ExpertService {
         }if (!expertOptional.isPresent()){
             throw  new NotFoundExpertException(messageSource.getMessage("not.found.expert",null,new Locale("en_us")));
         }
+        if(expertOptional.get().getServices().contains(subService.get())){
+            throw new DuplicatedSubServiceException(messageSource.getMessage("sub.service.exist.in.expert.list",null,new Locale("en_us")));
+        }
         expertOptional.get().getServices().add(subService.get());
         expertRepository.save(expertOptional.get());
 
-    }
-
-    @Override
-    public void addExpertToSubService(SelectFieldForExpertDto dto) {
-        //is present
-        Optional<SubService> service = subServiceRepository.findByName(dto.getSubServiceDto().getName());
-        Optional<Expert> expert = expertRepository.findByEmail(dto.getExpertDto().getEmail());
-        expert.get().getServices().add(service.get());
-        expertRepository.save(expert.get());
-    }
-
-    @Override
-    public ExpertDto loginExpert(ExpertDto dto) throws NotFoundExpertException, InvalidPassword {
-        Optional<Expert> expert = expertRepository.findByEmail(dto.getEmail());
-        if (expert.isPresent()) {
-            if (!expert.get().getPassword().equals(dto.getPassword())) {
-                throw new InvalidPassword(messageSource.getMessage("invalid.password",null,new Locale("en_us")));
-            } else {
-                return expertMapper.toExpertDto(expert.get());
-            }
-        } else {
-            throw new NotFoundExpertException(messageSource.getMessage("not.found.expert",null,new Locale("en_us")));
-        }
     }
 
 
@@ -208,9 +186,12 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     @Override
-    public void addSubServiceToExpertList(AddSubServiceToExpertDto dto) {
+    public void addSubServiceToExpertList(AddSubServiceToExpertDto dto) throws DuplicatedSubServiceException {
         Optional<Expert> expert = expertRepository.findById(dto.getExpertId());
         Optional<SubService> subService = subServiceRepository.findById(dto.getSubServiceId());
+        if (expert.get().getServices().contains(subService.get())){
+            throw new DuplicatedSubServiceException(messageSource.getMessage("sub.service.exist.in.expert.list",null,new Locale("en_us")));
+        }
         expert.get().getServices().add(subService.get());
         expertRepository.save(expert.get());
     }

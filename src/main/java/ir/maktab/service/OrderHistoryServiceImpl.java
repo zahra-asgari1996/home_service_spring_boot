@@ -3,6 +3,7 @@ package ir.maktab.service;
 import ir.maktab.data.repository.OrderHistoryRepository;
 import ir.maktab.dto.OrderHistoryDto;
 import ir.maktab.service.mapper.OrderHistoryMapper;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 @Service
